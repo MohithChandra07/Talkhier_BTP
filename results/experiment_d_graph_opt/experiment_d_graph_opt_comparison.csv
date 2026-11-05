@@ -1,0 +1,6 @@
+problem_id,ground_truth,cond_a_choice,cond_a_correct,cond_a_evals,cond_a_runtime_s,cond_b_base_choice,cond_b_base_correct,cond_b_base_quality,cond_b_base_runtime_s,cond_b_opt_a0,cond_b_opt_final,cond_b_opt_correct,cond_b_opt_quality,cond_b_opt_mean_score,cond_b_opt_retries,cond_b_opt_runtime_s
+0,3,3,True,0,275.05,3,True,HELPFUL,357.04,2,3,True,HELPFUL,8.0,0,195.38
+1,0,0,True,0,225.2,0,True,HELPFUL,317.27,1,0,True,HELPFUL,6.67,0,224.97
+2,2,2,True,0,656.1,2,True,HELPFUL,472.41,3,2,True,HELPFUL,5.0,0,251.75
+3,0,0,True,0,2460.0,2,False,HARMFUL,437.89,0,0,True,NEUTRAL_RETAINED_CORRECT,5.0,0,256.1
+4,1,0,False,0,239.4,0,False,NEUTRAL_RETAINED_INCORRECT,335.07,0,0,False,NEUTRAL_RETAINED_INCORRECT,10.0,0,238.39

@@ -1,0 +1,6 @@
+problem_id,condition,ground_truth,a0_choice,final_choice,a0_correct,final_correct,evaluators_invoked_count,valid_scores_count,not_applicable_count,invalid_count,mean_score,disagreement_detected,total_retries,revisor_decision,revision_quality,runtime_s
+0,Condition_B_Graph_Dispatch_Opt,3,2,3,False,True,5,1,4,0,8.0,False,0,REVISED,HELPFUL,195.38
+1,Condition_B_Graph_Dispatch_Opt,0,1,0,False,True,5,3,2,0,6.67,True,0,REVISED,HELPFUL,224.97
+2,Condition_B_Graph_Dispatch_Opt,2,3,2,False,True,5,3,2,0,5.0,False,0,REVISED,HELPFUL,251.75
+3,Condition_B_Graph_Dispatch_Opt,0,0,0,True,True,5,4,1,0,5.0,True,0,RETAINED,NEUTRAL_RETAINED_CORRECT,256.1
+4,Condition_B_Graph_Dispatch_Opt,1,0,0,False,False,5,3,2,0,10.0,False,0,RETAINED,NEUTRAL_RETAINED_INCORRECT,238.39
