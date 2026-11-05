@@ -1,2 +1,8 @@
 *__pycache__*
 config/*
+.venv/
+*.before-baseline
+*.debug-backup
+*.azure-backup
+.DS_Store
+

@@ -1,0 +1,3 @@
+problem_id,ground_truth,cond_a_a0,cond_a_final,cond_a_correct,cond_a_eval_invoked,cond_a_mean_score,cond_a_rev_quality,cond_a_runtime,cond_b_a0,cond_b_final,cond_b_correct,cond_b_eval_invoked,cond_b_mean_score,cond_b_rev_quality,cond_b_runtime,agreement_final
+0,3,0,3,True,0,10.0,HELPFUL,275.05,2,3,True,5,5.75,HELPFUL,357.04,True
+1,0,0,0,True,0,,NEUTRAL_RETAINED_CORRECT,225.2,1,0,True,5,8.75,HELPFUL,317.27,True

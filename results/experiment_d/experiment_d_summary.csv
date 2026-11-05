@@ -1,0 +1,11 @@
+problem_id,condition,ground_truth,a0_choice,final_choice,a0_correct,final_correct,answer_changed,all_five_evaluators_invoked,evaluators_invoked_count,valid_scores_count,mean_score,revisor_decision,runtime_s,tt_score,ce_score,pl_score,la_score,fl_score
+0,Condition_A_Existing,3,0,3,False,True,True,False,0,5,10.0,REVISED,244.67,10,10,10,10,10
+0,Condition_B_Controlled,3,2,2,False,False,False,True,5,5,8.0,RETAINED,356.05,0,10,10,10,10
+1,Condition_A_Existing,0,0,0,True,True,False,False,0,0,,RETAINED,224.45,,,,,
+1,Condition_B_Controlled,0,1,0,False,True,True,True,5,4,8.75,REVISED,266.18,10,10,,10,5
+2,Condition_A_Existing,2,2,2,True,True,False,False,0,0,,RETAINED,675.7,,,,,
+2,Condition_B_Controlled,2,3,3,False,False,False,True,5,3,8.33,RETAINED,323.39,5,10,,10,
+3,Condition_A_Existing,0,0,0,True,True,False,False,0,0,,RETAINED,2337.49,,,,,
+3,Condition_B_Controlled,0,2,2,False,False,False,True,5,2,6.5,RETAINED,384.2,10,,,3,
+4,Condition_A_Existing,1,0,0,False,False,False,False,0,0,,RETAINED,215.93,,,,,
+4,Condition_B_Controlled,1,0,0,False,False,False,True,5,4,10.0,RETAINED,305.18,,10,10,10,10

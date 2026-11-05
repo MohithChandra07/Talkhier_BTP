@@ -1,0 +1,6 @@
+problem_id,ground_truth,cond_a_a0,cond_a_final,cond_a_correct,cond_a_eval_invoked,cond_a_mean_score,cond_a_runtime,cond_b_a0,cond_b_final,cond_b_correct,cond_b_eval_invoked,cond_b_mean_score,cond_b_runtime,agreement_final
+0,3,0,3,True,0,10.0,244.67,2,2,False,5,8.0,356.05,False
+1,0,0,0,True,0,,224.45,1,0,True,5,8.75,266.18,True
+2,2,2,2,True,0,,675.7,3,3,False,5,8.33,323.39,False
+3,0,0,0,True,0,,2337.49,2,2,False,5,6.5,384.2,False
+4,1,0,0,False,0,,215.93,0,0,False,5,10.0,305.18,True

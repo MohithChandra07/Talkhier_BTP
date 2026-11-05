@@ -204,6 +204,21 @@ def create_react_agent(
     if _should_bind_tools(model, tool_classes):
         model = cast(BaseChatModel, model).bind_tools(tool_classes)
 
+    def _is_duplicate_or_output_loop(last_message: AIMessage, messages: Sequence[BaseMessage]) -> bool:
+        # Check if output_tool was already executed
+        if any(tc.get("name") == "output_tool" for tc in last_message.tool_calls):
+            if any(isinstance(m, ToolMessage) and m.name == "output_tool" for m in messages):
+                return True
+        # Check for repeated identical tool calls
+        past_tool_calls = []
+        for m in messages:
+            if isinstance(m, AIMessage) and m.tool_calls:
+                for tc in m.tool_calls:
+                    past_tool_calls.append((tc.get("name"), str(tc.get("args"))))
+        if all((tc.get("name"), str(tc.get("args"))) in past_tool_calls for tc in last_message.tool_calls):
+            return True
+        return False
+
     # Define the function that determines whether to continue or not
     if response_schema is not None:
         def should_continue(state: AgentState) -> Literal["tools", "respond"]:
@@ -212,10 +227,11 @@ def create_react_agent(
             # If there is no function call, then we finish
             if not isinstance(last_message, AIMessage) or not last_message.tool_calls:
                 return "respond"
-                # return "__end__"
+            # Prevent infinite loops and duplicate tool execution
+            if _is_duplicate_or_output_loop(last_message, messages):
+                return "respond"
             # Otherwise if there is, we continue
-            else:
-                return "tools"
+            return "tools"
     else:
         def should_continue(state: AgentState) -> Literal["tools", "__end__"]:
             messages = state["messages"]
@@ -223,9 +239,11 @@ def create_react_agent(
             # If there is no function call, then we finish
             if not isinstance(last_message, AIMessage) or not last_message.tool_calls:
                 return "__end__"
+            # Prevent infinite loops and duplicate tool execution
+            if _is_duplicate_or_output_loop(last_message, messages):
+                return "__end__"
             # Otherwise if there is, we continue
-            else:
-                return "tools"
+            return "tools"
 
     # we're passing store here for validation
     preprocessor = _get_model_preprocessing_runnable(
@@ -236,14 +254,19 @@ def create_react_agent(
     if response_schema is not None:
         model_response_runnable = preprocessor | model.with_structured_output(response_schema)
         def final_response(state: AgentState, config: RunnableConfig) -> AgentState:
-            for _ in range(10):
+            last_err = None
+            for attempt in range(3):
                 try:
-                    result =  model_response_runnable.invoke(state, config)
-                    return response_format(result)
+                    result = model_response_runnable.invoke(state, config)
+                    if result is not None:
+                        return response_format(result)
+                    last_err = ValueError("Worker structured output returned None")
+                    print(f"Worker attempt {attempt + 1}/3 failed: {last_err}", flush=True)
                 except Exception as e:
-                    print(e)
-                    print("Error occured. Retrying...")
+                    last_err = e
+                    print(f"Worker attempt {attempt + 1}/3 failed: {type(e).__name__}: {e}", flush=True)
                     state["messages"].append("Error message: " + str(e))
+            raise RuntimeError(f"Worker response failed after 3 attempts. Last error: {last_err}")
             
 
 

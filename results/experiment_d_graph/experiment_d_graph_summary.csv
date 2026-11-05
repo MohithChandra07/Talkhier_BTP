@@ -1,0 +1,5 @@
+problem_id,condition,ground_truth,a0_choice,final_choice,a0_correct,final_correct,answer_changed,all_five_evaluators_invoked,evaluators_invoked_count,valid_scores_count,mean_score,revisor_decision,revision_quality,runtime_s,tt_score,ce_score,pl_score,la_score,fl_score
+0,Condition_A_Original,3,0,3,False,True,True,False,0,5,10.0,REVISED,HELPFUL,275.05,10,10,10,10,10
+0,Condition_B_Graph_Dispatch,3,2,3,False,True,True,True,5,4,5.75,REVISED,HELPFUL,357.04,,10,10,0,3
+1,Condition_A_Original,0,0,0,True,True,False,False,0,0,,RETAINED,NEUTRAL_RETAINED_CORRECT,225.2,,,,,
+1,Condition_B_Graph_Dispatch,0,1,0,False,True,True,True,5,4,8.75,REVISED,HELPFUL,317.27,10,,5,10,10

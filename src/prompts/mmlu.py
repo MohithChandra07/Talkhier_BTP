@@ -1,6 +1,6 @@
 
 
-def getPrompts(domain, problem):
+def getPrompts(domain, problem, reverse_evaluators=False):
     choice_info = ""
     for i, x in enumerate(problem['choices']):
         choice_info += f"{i}) {x.replace("{", "{{").replace("}", "}}")}, "
@@ -93,6 +93,10 @@ def getPrompts(domain, problem):
                         "Formal Logic Evaluator: The Formal Logic Evaluator ensures that translations from natural language into predicate logic are syntactically correct and semantically accurate. It checks that quantifiers, connectives, and predicates are used properly to reflect the original meaning, including handling negations and implications correctly. Examples: 1. Correct Quantifier Use: 'All students study' → (∀x)(Sx → Tx) - Ensures the universal quantifier (∀x) applies correctly. 2. Negation Handling: 'No student fails without studying' → (∀x)(Sx ⊃ ~Fx) - Verifies negations are correctly placed. 3. Implication Handling: 'If it rains, the ground gets wet' → (∀x)(Rx → Gx) - Ensures causality is captured properly. 4. Logical Consistency: 'Some students fail the exam' → (∃x)(Sx ∧ Fx) - Checks the correct use of existential quantifiers for 'some.' The evaluator ensures that the logical structure aligns with the original sentence without errors in interpretation."
                         ]
         tools = [[4,8], [4,9], [4], [4],[4]]
+        if reverse_evaluators:
+            eteam_member_names = eteam_member_names[::-1]
+            explanations = explanations[::-1]
+            tools = tools[::-1]
 
 
     elif domain == "us_foreign_policy":
@@ -141,7 +145,8 @@ def getPrompts(domain, problem):
             "additional_prompt": "VERY IMPORTANT:\n1. When contacting an EVALUATOR AGENT ({members}), NEVER SHOW ANY evaluation results in 'intermediate_output'." + in_out[4] + ""\
                 "\n2. When reporting back to {finish}, you MUST OUTPUT a summary of ALL evaluation resuls for ALL scenarios as 'messages'."\
                 "\n3. When reporting back to {finish}, you MUST also return ALL evaluation results IN 'intermediate_output'. Make sure to include the most recent answers and evaluation results." + in_out[5] + ""\
-                "\n4. When {finish} instructs you to re-evaluate, you must instruct all agents ({members}) to re-evaluate, while making sure to show them the revised answers."
+                "\n4. When {finish} instructs you to re-evaluate, you must instruct all agents ({members}) to re-evaluate, while making sure to show them the revised answers."\
+                "\n5. Once the relevant evaluator agent has provided their evaluation score and reasoning, the evaluation is complete. You MUST select {finish} as 'next' to report back. Do not call evaluator agents again if the evaluation has already been performed."
         }
 
     for i in range(len(eteam_member_names)):
@@ -161,6 +166,7 @@ def getPrompts(domain, problem):
         "You can split up the problems into smaller parts if required. Furthermore, you should use tools to lookup things you need." + \
         " The final answer must be only in the dictionary form of: " + output_format
     
+    majority_threshold = (len(eteam_member_names) // 2) + 1
     team_info = {
         "team": "Default",
         "return": "FINISH",
@@ -174,7 +180,7 @@ def getPrompts(domain, problem):
                             "" + in_out[0], "tools": [4]},
         "Revisor": {"prompt": "You are an Answer Revisor that receives an answer with their evaluation results, and outputs, if necessary, a revised answer that takes into account the evaluation results. Follow these steps for a revision:"\
                 "\n1. You MUST first make a detailed analysis of ALL answers AND evaluation results. Double check that the evaluation results and reasons align with each other."\
-                "\n2. Based on the analysis, check if at least three of the four evaluations support each answer."\
+                f"\n2. Based on the analysis, check if at least {majority_threshold} of the {len(eteam_member_names)} evaluations support each answer."\
                 "\n3. If an answer is not supported by the majority of evaluations, you must flip the specific answer, making sure to update the choices as well."\
                 "\n4. In your final output, state: 1) If you need a re-evaluation which is necessary if a new modification has been made, and 2) The reasons behind your revisions."\
                 "" + in_out[2], "tools": [4]},
@@ -192,11 +198,16 @@ def getPrompts(domain, problem):
 
 
     if domain == "formal_logic":
-        prompt["team"]["Evaluator"]["Truth Table"]["prompt"] = "You are a truth table evaluator. Evaluate using the following:\n" + explanations[0] + \
+        tt_idx = eteam_member_names.index("Truth Table")
+        ce_idx = eteam_member_names.index("Counterexample")
+        prompt["team"]["Evaluator"]["Truth Table"]["prompt"] = "You are a truth table evaluator. Evaluate using the following:\n" + explanations[tt_idx] + \
             "\nFinal output: Expected answer (keep unmodified) and evaluation results embedded into 'intermediate_output' in the form of " + int_out_score_format + "."
-        prompt["team"]["Evaluator"]["Counterexample"]["prompt"] = "You are a counterexample evaluator. Evaluate using the following:\n" + explanations[1] + \
+        prompt["team"]["Evaluator"]["Counterexample"]["prompt"] = "You are a counterexample evaluator. Evaluate using the following:\n" + explanations[ce_idx] + \
             "\nFinal output: Expected answer (keep unmodified) and evaluation results embedded into 'intermediate_output' in the form of " + int_out_score_format + "."
-        prompt["team"]["Evaluator"]["additional_prompt"] += "\n5. Think of whether a truth-table or counterexample is involed first. If there is a truth-table involved, ask the Truth Table evaluator. If there is a conterexample involved, ask the Counterexample evaluator."
+        if reverse_evaluators:
+            prompt["team"]["Evaluator"]["additional_prompt"] += "\n5. Think of whether formal logic or logical argument is involved first. If there is a formal logic problem involved, ask the Formal Logic evaluator. If there is a logical argument involved, ask the Logical Argument evaluator."
+        else:
+            prompt["team"]["Evaluator"]["additional_prompt"] += "\n5. Think of whether a truth-table or counterexample is involed first. If there is a truth-table involved, ask the Truth Table evaluator. If there is a conterexample involved, ask the Counterexample evaluator."
         prompt["team"]["prompt"] += "\nOnly finish when all evaluation results are positive."
         prompt["team"]["Revisor"]["tools"] += [8,9]
         prompt["team"]["Revisor"]["prompt"] += "\nYou can use tools required to solve problems. Make sure to be careful of what is required for input."

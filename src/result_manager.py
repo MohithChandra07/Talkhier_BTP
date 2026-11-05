@@ -27,12 +27,21 @@ class ResultManager:
     
     def remove(self, data):
         self.loadFile()
-        self.results_list.remove(data)
-        self.saveFile()
+        if data in self.results_list:
+            self.results_list.remove(data)
+            self.saveFile()
+        else:
+            filtered = [row for row in self.results_list if str(row[0]) != str(data[0])]
+            if len(filtered) != len(self.results_list):
+                self.results_list = filtered
+                self.saveFile()
     
     def replace(self, data_from, data_to):
         self.loadFile()
-        self.results_list.remove(data_from)
+        if data_from in self.results_list:
+            self.results_list.remove(data_from)
+        else:
+            self.results_list = [row for row in self.results_list if str(row[0]) != str(data_to[0])]
         self.results_list.append(data_to)
         self.saveFile()
     
@@ -40,6 +49,7 @@ class ResultManager:
     def is_present(self, data, axis=0):
         self.loadFile()
         for read_data in self.results_list:
-            if read_data[axis] == data[axis]:
-                return True
+            if str(read_data[axis]) == str(data[axis]):
+                if len(read_data) > 1 and str(read_data[1]) != '-':
+                    return True
         return False

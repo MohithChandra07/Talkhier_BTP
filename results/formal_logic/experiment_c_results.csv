@@ -1,0 +1,7 @@
+problem_id,condition,pre_revision,final_answer,ground_truth,pre_correct,correct,runtime_s
+0,original (baseline),0,3,3,False,True,300.0
+3,original (baseline),2,0,0,False,True,651.28
+4,original (baseline),0,0,1,False,False,253.13
+0,reversed,0,3,3,False,True,121.24
+3,reversed,2,2,0,False,False,344.02
+4,reversed,0,0,1,False,False,343.71

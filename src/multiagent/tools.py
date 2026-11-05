@@ -103,7 +103,7 @@ class OutputTool(BaseTool):
     def _run(
         self, in_str: str, run_manager: Optional[CallbackManagerForToolRun] = None
     ) -> str:
-        return ""
+        return "Thoughts recorded. Analysis complete. Now provide your final evaluation text and do not call output_tool again."
 
 
 class ClickAggregator(BaseTool):

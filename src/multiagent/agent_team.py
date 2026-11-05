@@ -21,6 +21,99 @@ import multiagent.tools as tools
 import multiagent.colors as colors
 import json
 
+def parse_intermediate_output(val, fallback):
+    if isinstance(val, dict):
+        return val if val != {} else fallback
+    if not isinstance(val, str):
+        return fallback
+
+    s = val.strip()
+    if s in ["", "{}", "{{}}"]:
+        return fallback
+    if "</think>" in s:
+        s = s.split("</think>")[-1].strip()
+    if s.startswith("```"):
+        lines = s.splitlines()
+        if len(lines) >= 2 and lines[0].startswith("```"):
+            s = "\n".join(lines[1:-1] if lines[-1].startswith("```") else lines[1:]).strip()
+
+    for parser in (json.loads, ast.literal_eval):
+        try:
+            res = parser(s)
+            if isinstance(res, dict):
+                return res if res != {} else fallback
+        except Exception:
+            pass
+
+    start = s.find('{')
+    end = s.rfind('}')
+    if start != -1 and end != -1 and end > start:
+        sub = s[start:end+1]
+        for parser in (json.loads, ast.literal_eval):
+            try:
+                res = parser(sub)
+                if isinstance(res, dict):
+                    return res if res != {} else fallback
+            except Exception:
+                pass
+
+    print("Could not parse intermediate output:", s[:100] if len(s) > 100 else s)
+    return fallback
+
+def extract_evaluator_score(intermediate_output, evaluator_name=None):
+    """
+    Extracts and validates an evaluator correctness score from intermediate_output.
+    Returns: (score: Optional[int], status: str, reason: str)
+    NEVER defaults a malformed or missing score to 10.
+    """
+    if not isinstance(intermediate_output, dict):
+        return None, "INVALID_STRUCTURE", "intermediate_output is not a dictionary"
+
+    evaluation = intermediate_output.get("evaluation")
+    target_dict = None
+
+    if isinstance(evaluation, dict):
+        if evaluator_name and evaluator_name in evaluation:
+            target_dict = evaluation[evaluator_name]
+        elif evaluator_name:
+            for k, v in evaluation.items():
+                if isinstance(v, dict) and (evaluator_name.lower() in k.lower() or k.lower() in evaluator_name.lower()):
+                    target_dict = v
+                    break
+        if target_dict is None:
+            for k, v in evaluation.items():
+                if isinstance(v, dict) and "Correctness Score" in v:
+                    target_dict = v
+                    break
+    elif "Correctness Score" in intermediate_output:
+        target_dict = intermediate_output
+    else:
+        return None, "NO_EVALUATION", "No 'evaluation' object in intermediate_output"
+
+    if not isinstance(target_dict, dict):
+        return None, "EVALUATOR_NOT_FOUND", f"Evaluator {evaluator_name or 'any'} not found in evaluation"
+
+    raw_score = target_dict.get("Correctness Score")
+    reason = str(target_dict.get("Reason", ""))
+
+    if raw_score is None:
+        return None, "MISSING_SCORE", "No 'Correctness Score' field found"
+
+    try:
+        if isinstance(raw_score, str):
+            clean = raw_score.strip().split("/")[0].strip()
+            score = int(float(clean))
+        else:
+            score = int(raw_score)
+
+        if 0 <= score <= 10:
+            return score, "OK", reason
+        else:
+            return None, "OUT_OF_RANGE", f"Score {score} not in range [0, 10]"
+    except Exception as e:
+        return None, "MALFORMED_SCORE", f"Cannot parse score {raw_score!r}: {e}"
+
+
 class AgentTeam():
 
     def __init__(self, config, llm, member_list=[], member_names=[], member_info=[], team_name="Default", supervisor_name="FINISH",
@@ -112,15 +205,26 @@ class AgentTeam():
 
             supervisor_chain = prompt | self.llm.with_structured_output(routeResponse)
 
-            for _ in range(10):
+            result = None
+            last_error = None
+
+            for attempt in range(3):
                 try:
                     result = supervisor_chain.invoke(state)
-                    break
+                    if result is not None:
+                        break
+                    last_error = ValueError("Supervisor structured output returned None")
+                    print(f"Supervisor attempt {attempt + 1}/3 failed: {last_error}", flush=True)
                 except Exception as e:
-                    print(e)
-                    print("Error occured. Retrying...")
-                    state["error"] = "\n\nDouble check that 'next' is one of:  {options}."
-            
+                    last_error = e
+                    print(f"Supervisor attempt {attempt + 1}/3 failed: {type(e).__name__}: {e}", flush=True)
+                state['error'] = f"Previous output failed: {type(last_error).__name__}: {last_error}."
+
+            if result is None:
+                raise RuntimeError(
+                    f"Supervisor failed after 3 attempts. Last error: {last_error}"
+                ) from last_error
+
             new_msg = AIMessage(content=result.messages, name=self.team_name + "_Supervisor")
             if not ("Intermediate Output" in new_msg.content or "Final Output" in new_msg.content):
                 if result.intermediate_output in ["", "{{}}"]:
@@ -128,19 +232,7 @@ class AgentTeam():
                 if not str(result.intermediate_output) in new_msg.content:
                     new_msg.content = new_msg.content + "\n\nFinal Output: " + str(result.intermediate_output)
 
-            if isinstance(result.intermediate_output, str):
-                try:
-                    result.intermediate_output = ast.literal_eval(result.intermediate_output)
-                except Exception as e:
-                    try:
-                        result.intermediate_output = json.loads(result.intermediate_output)
-                    except Exception as e2:
-                        print("Could not parse.")# Current output:", result.intermediate_output)
-                        result.intermediate_output = state["intermediate_output"]
-                        print(e)
-                        print(e2)
-                if result.intermediate_output == {}:
-                    result.intermediate_output = state["intermediate_output"]
+            result.intermediate_output = parse_intermediate_output(result.intermediate_output, state["intermediate_output"])
             
             if self.fullshared_memory:
                 new_history = {
@@ -177,6 +269,7 @@ class AgentTeam():
                 history: Dict[str, Annotated[Sequence[BaseMessage], operator.add]]
                 messages: BaseMessage
                 background: BaseMessage
+                # pyrefly: ignore [bad-class-definition]
                 intermediate_output: Dict[str, Any] = Field(description=self.intermediate_output_desc)
                 next: str
                 initial_prompt: BaseMessage
@@ -206,13 +299,18 @@ class AgentTeam():
 
     def prompt(state, config, graph, team_name, sup_name, fullshared_memory):
         int_output = {}
+        revision_history = []
+        executed_agents = []
         color_assign = colors.TerminalColor()
         prev_len = len(state["history"][team_name + " Supervisor"])
 
         if "initial_prompt" in state:
             prev_initial_prompt = state["initial_prompt"]
             if not fullshared_memory:
-                state["initial_prompt"] = "Prompter: " + state["history"][team_name + " Supervisor"][-1].name + "\n" + state["history"][team_name + " Supervisor"][-1].content
+                last_msg = state["history"][team_name + " Supervisor"][-1]
+                p_name = last_msg.name or "Supervisor"
+                p_content = last_msg.content or ""
+                state["initial_prompt"] = f"Prompter: {p_name}\n{p_content}"
         else:
             prev_initial_prompt = state["history"][team_name + " Supervisor"][-1].content
             state["initial_prompt"] = prev_initial_prompt
@@ -222,6 +320,7 @@ class AgentTeam():
         ):
             if "__end__" not in s:
                 key = list(s.keys())[0]
+                executed_agents.append(key)
                 if key in ['history', 'messages', 'background', 'intermediate_output', 'next']:
                     result = s
                     try:
@@ -235,9 +334,25 @@ class AgentTeam():
                 else:
                     result = s[key]
 
-                if int_output == {} and result["intermediate_output"] != {}:
-                    int_output = result["intermediate_output"]
-                print("Agent:", color_assign.colorText(key + f" ({len(result["history"][key])})", key))
+                cur_io = result.get("intermediate_output", {})
+                if isinstance(cur_io, dict) and cur_io != {}:
+                    choice_val = None
+                    if "choice" in cur_io:
+                        choice_val = cur_io["choice"]
+                    elif "choice" in cur_io.get("answer", {}):
+                        choice_val = cur_io["answer"]["choice"]
+
+                    if int_output == {}:
+                        int_output = cur_io
+
+                    if choice_val is not None:
+                        revision_history.append({
+                            "agent": key,
+                            "choice": choice_val,
+                            "intermediate_output": cur_io,
+                        })
+
+                print("Agent:", color_assign.colorText(key + f" ({len(result['history'][key])})", key))
                 if key == team_name + " Supervisor":
                     print("Messages:")
                     print(color_assign.colorText(result["history"][key][-1].pretty_repr(), key))
@@ -254,7 +369,11 @@ class AgentTeam():
                     print()
         # print(s)
         state["initial_prompt"] = prev_initial_prompt
+        result["_executed_agents"] = executed_agents
         if sup_name == "":
+            result["_revision_history"] = revision_history
+            result["_initial_intermediate_output"] = int_output
+            result["_executed_agents"] = executed_agents
             return [result, int_output]
         return result
     
@@ -293,9 +412,9 @@ class ReactAgent():
         class routeResponse(BaseModel):
             intermediate_output: str = Field(description=self.intermediate_output_desc)
                 
-            # @field_validator('intermediate_output', mode="before")
-            # def cast_to_string(cls, v):
-            #     return str(v)
+            @field_validator('intermediate_output', mode="before")
+            def cast_to_string(cls, v):
+                return str(v)
 
         agent = create_react_agent(self.llm, tools=agent_tools, debug=False, state_modifier=prompt, response_schema=routeResponse, \
                                    response_format=ReactAgent.responseFormatter)
@@ -307,41 +426,57 @@ class ReactAgent():
         color_assign = colors.TerminalColor()
 
         if fullshared_memory:
-            state["messages"] = state["history"]["all"][-15:]
+            state["messages"] = state.get("history", {}).get("all", [])[-15:]
         else:
-            state["messages"] = state["history"][name][-15:]
-        prev_history = state["history"]
+            if name in state.get("history", {}):
+                state["messages"] = state["history"][name][-15:]
+            elif "all" in state.get("history", {}):
+                state["messages"] = state["history"]["all"][-15:]
+            else:
+                default_prompt = state.get("initial_prompt", "")
+                p_text = default_prompt if isinstance(default_prompt, str) else getattr(default_prompt, "content", "")
+                state["messages"] = [HumanMessage(content=p_text or "Execute task", name="Prompter")]
+        prev_history = dict(state.get("history", {}))
+        if name not in prev_history:
+            prev_history[name] = list(state["messages"])
         state["history"] = {}
 
         prev_initial_prompt = state["initial_prompt"]
         
         if not fullshared_memory:
-            state["initial_prompt"] = "Prompter: " + prev_history[name][-1].name + "\n" + prev_history[name][-1].content
-        
+            last_hist = prev_history[name][-1]
+            p_name = last_hist.name or "Prompter"
+            p_content = last_hist.content or ""
+            state["initial_prompt"] = f"Prompter: {p_name}\n{p_content}"
 
         prev_len = len(state["messages"])
+        result = dict(state)
 
-        for result in agent.stream(state, {}):
-            if "__end__" not in result:
-                
-                if len(result["messages"]) != prev_len:
-                    resp = result["messages"][-1]
+        for step in agent.stream(state, {}, stream_mode="values"):
+            if "__end__" not in step:
+                msgs = step.get("messages", [])
+                if len(msgs) != prev_len:
+                    resp = msgs[-1]
                     if isinstance(resp, ToolMessage) and resp.name == "output_tool":
                         continue
-                    # print(result)
                     try:
-                        print("Agent:", color_assign.colorText(name + f' ({len(result["messages"])})', name))
+                        print("Agent:", color_assign.colorText(name + f' ({len(msgs)})', name))
                     except Exception as e:
                         print(e)
-                        print(result)
+                        print(step)
                     print(color_assign.colorText(resp.pretty_repr(), name))
                     print()
-                    prev_len = len(result["messages"])
+                    prev_len = len(msgs)
+                result = step
 
+        msgs = result.get("messages", [])
+        last_msg_content = msgs[-1].content if msgs else ""
+        new_msg = AIMessage(content=last_msg_content, name=name.replace(" ", "_"))
 
-        new_msg = AIMessage(content=result["messages"][-1].content, name=name.replace(" ", "_"))
-        if not "Final Output" in new_msg.content and not result["intermediate_output"] in new_msg.content:
-            new_msg.content = new_msg.content + "\n\nFinal Output: " + result["intermediate_output"]
+        int_out_str = str(result.get("intermediate_output", ""))
+        if not "Final Output" in new_msg.content and int_out_str and not int_out_str in new_msg.content:
+            new_msg.content = new_msg.content + "\n\nFinal Output: " + int_out_str
+
         if fullshared_memory:
             result["history"] = {
                                     **prev_history,  # Keep the existing history
@@ -357,23 +492,17 @@ class ReactAgent():
                                 }
             
         result["messages"] = new_msg
-        result["next"] = state["next"]
+        result["next"] = state.get("next", "")
 
-        result["background"].name = name
+        if "background" in result and hasattr(result["background"], "name"):
+            result["background"].name = name
         result["initial_prompt"] = prev_initial_prompt
-        
 
-        if isinstance(result["intermediate_output"], str):
-            try:
-                result["intermediate_output"] = ast.literal_eval(result["intermediate_output"])
-            except Exception as e:
-                try:
-                    result["intermediate_output"] = json.loads(result["intermediate_output"])
-                except Exception as e2:
-                    print("Could not parse.")# Current output:", result["intermediate_output"])
-                    result["intermediate_output"] = state["intermediate_output"]
-                    print(e)
-                    print(e2)
+        raw_io = result.get("intermediate_output", "")
+        parsed_out = parse_intermediate_output(raw_io, None)
+        if parsed_out is None and hasattr(new_msg, "content"):
+            parsed_out = parse_intermediate_output(new_msg.content, None)
+        result["intermediate_output"] = parsed_out if parsed_out is not None else state.get("intermediate_output", {})
 
         return result
 

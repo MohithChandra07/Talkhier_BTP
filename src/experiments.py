@@ -27,14 +27,29 @@ def mmlu(problem, prompt, config):
     from langchain_core.messages import HumanMessage
 
     iterations = 0
-    while iterations < 10:
+    while iterations < 3:
         try:
-            output = team(state = {"history": {"Default Supervisor": [HumanMessage(content=prompt["team"]["prompt"])], "all": [HumanMessage(content=prompt["team"]["prompt"])]}, "intermediate_output": {}},
-            config = {"recursion_limit": int(config["LLM"]["max_attempts"])})
+            output = team(
+                state={
+                    "history": {
+                        "Default Supervisor": [HumanMessage(content=prompt["team"]["prompt"])],
+                        "all": [HumanMessage(content=prompt["team"]["prompt"])],
+                    },
+                    "intermediate_output": {},
+                },
+                config={"recursion_limit": int(config["LLM"]["max_attempts"])},
+            )
             break
         except Exception as e:
-            print(e)
-            print("Retrying...")
+            iterations += 1
+            print(
+                f"Experiment attempt {iterations}/3 failed: "
+                f"{type(e).__name__}: {e}",
+                flush=True,
+            )
+            if iterations >= 3:
+                raise
+            print("Retrying...", flush=True)
 
 
     if isinstance(output, list):
@@ -62,13 +77,17 @@ def mmlu(problem, prompt, config):
 
 
 
-def runExperimentMMLU(file_path, domain, config):
+def runExperimentMMLU(file_path, domain, config, start_id=0, end_id=-1):
     
     from datasets import load_dataset
     dataset = load_dataset("cais/mmlu", domain)
     results = ResultManager(file_path, columns=["Problem ID", "Answer", "Correct Answer", "Pre-Revision"])
 
-    for problem_id in range(len(dataset["test"])):
+    total = len(dataset["test"])
+    actual_end = total if end_id == -1 else min(end_id, total)
+    print(f"Running {domain} from index {start_id} to {actual_end} (total {actual_end - start_id} problems)...")
+
+    for problem_id in range(start_id, actual_end):
         runSingleMMLU(domain, config, problem_id, results=results)
 
 
@@ -81,6 +100,7 @@ def runSingleMMLU(domain, config, problem_id, results=None):
     if results is not None:
         placeholder = [problem_id, '-', '-', '-']
         if results.is_present(placeholder):
+            print(f"Problem {problem_id} already completed, skipping.")
             return
         def remove_checkpoint():
             results.remove(placeholder)
@@ -88,7 +108,10 @@ def runSingleMMLU(domain, config, problem_id, results=None):
         results.add(placeholder)
         atexit.register(remove_checkpoint)
 
+    t0 = time.time()
     output = mmlu(problem, MMLUPrompt.getPrompts(domain, problem), config)
+    elapsed = time.time() - t0
+    print(f"Problem {problem_id} finished in {elapsed:.2f}s")
     print("Agent Answer:", output[0])
     print("Agent Answer before Revision:", output[1])
     print("Actual Answer:", problem["answer"])
@@ -137,14 +160,18 @@ def loadConfig(path, path2):
     return config
 
 def getArgs():
+    base_dir = os.path.dirname(os.path.abspath(__file__))
+    default_cfg = os.path.abspath(os.path.join(base_dir, "..", "config", "config.ini"))
+    default_lcfg = os.path.abspath(os.path.join(base_dir, "..", "config", "config_llm.ini"))
+
     parser = argparse.ArgumentParser(description="Talk Structurally, Act Hierarchically (TalkHier): A Collaborative Framework for LLM Multi-Agent Systems")
     parser.add_argument('--config', '-cfg',
                         type=str,
-                        default="../config/config.ini",
+                        default=default_cfg,
                         help="Path to config file.")
     parser.add_argument('--llm-config', '-lcfg', 
                         type=str, 
-                        default="../config/config_llm.ini",
+                        default=default_lcfg,
                         help="Path to LLM config file.")
     parser.add_argument('--mode', '-m', 
                         type=str, 
@@ -155,6 +182,14 @@ def getArgs():
                         type=int,
                         default=-1,
                         help="Specific problem to execute; -1 for experiments on entire dataset.")
+    parser.add_argument('--start-id', '-si',
+                        type=int,
+                        default=0,
+                        help="Start index for problem range.")
+    parser.add_argument('--end-id', '-ei',
+                        type=int,
+                        default=-1,
+                        help="End index (exclusive) for problem range; -1 for entire dataset.")
     parser.add_argument('--thread-count', '-tc', 
                         type=int, 
                         default=1,
@@ -162,6 +197,14 @@ def getArgs():
     parser.add_argument('--vanilla', '-v', 
                         action="store_true",
                         help="Option to run with unmodified GPT.")
+    parser.add_argument('--legacy',
+                        action="store_true",
+                        default=False,
+                        help="Run legacy un-stabilized TalkHier baseline.")
+    parser.add_argument('--out-name',
+                        type=str,
+                        default=None,
+                        help="Custom output CSV filename prefix.")
 
     return parser.parse_args()
 
@@ -169,6 +212,7 @@ def getArgs():
 
 
 if __name__ == "__main__":
+    base_dir = os.path.dirname(os.path.abspath(__file__))
     args = getArgs()
 
     if not os.path.exists(args.llm_config):
@@ -181,12 +225,26 @@ if __name__ == "__main__":
         shutil.copy("../template/config.ini", args.config)
 
     config = loadConfig(args.config, args.llm_config)
+    if "STABILIZATION" not in config:
+        config.add_section("STABILIZATION")
+    config["STABILIZATION"]["enabled"] = "false" if args.legacy else "true"
+
     mmlu_list = ["moral_scenarios", "college_physics", "machine_learning", "formal_logic", "us_foreign_policy"]
-    prefix = "proposed.csv"
+    if args.out_name:
+        prefix = args.out_name
+    elif args.legacy:
+        prefix = "baseline_qwen3.csv"
+    else:
+        prefix = "stabilized_qwen3.csv"
+
+    results_dir = os.path.abspath(os.path.join(base_dir, "..", "results", args.mode))
+    os.makedirs(results_dir, exist_ok=True)
+    out_csv = os.path.join(results_dir, prefix)
 
     if args.problem_id != -1:
         if args.mode in mmlu_list:
-            runSingleMMLU(args.mode, config, args.problem_id)
+            results = ResultManager(out_csv, columns=["Problem ID", "Answer", "Correct Answer", "Pre-Revision"])
+            runSingleMMLU(args.mode, config, args.problem_id, results=results)
     else:
         if args.mode in mmlu_list:
-            runParallel(partial(runExperimentMMLU, "../results/" + args.mode + "/" + prefix, args.mode, config), args.thread_count)
+            runParallel(partial(runExperimentMMLU, out_csv, args.mode, config, start_id=args.start_id, end_id=args.end_id), args.thread_count)
