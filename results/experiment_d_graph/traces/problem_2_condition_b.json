@@ -1,0 +1,310 @@
+{
+  "problem_id": 2,
+  "condition": "Condition_B_Graph_Dispatch",
+  "ground_truth": 2,
+  "a0_choice": 3,
+  "final_choice": 2,
+  "a0_correct": false,
+  "final_correct": true,
+  "answer_changed": true,
+  "all_five_evaluators_invoked": true,
+  "evaluators_invoked_count": 5,
+  "invoked_evaluators_list": [
+    "Truth Table",
+    "Counterexample",
+    "Predicate Logic",
+    "Logical Argument",
+    "Formal Logic"
+  ],
+  "applicable_count": 3,
+  "valid_scores_count": 3,
+  "not_applicable_count": 2,
+  "invalid_count": 0,
+  "individual_scores": {
+    "Truth Table": null,
+    "Counterexample": null,
+    "Predicate Logic": 3,
+    "Logical Argument": 10,
+    "Formal Logic": 10
+  },
+  "individual_statuses": {
+    "Truth Table": "NOT_APPLICABLE",
+    "Counterexample": "NOT_APPLICABLE",
+    "Predicate Logic": "VALID",
+    "Logical Argument": "VALID",
+    "Formal Logic": "VALID"
+  },
+  "mean_score": 7.67,
+  "is_complete": true,
+  "consensus_type": "MAJORITY_SUPPORT",
+  "supports_initial_answer": true,
+  "revisor_decision": "REVISED",
+  "revision_quality": "HELPFUL",
+  "runtime_s": 472.41,
+  "revision_history": [
+    {
+      "step": "A0",
+      "choice": 3,
+      "reason": "The given proposition is (\u2203x)[(Ax \u2022 Lx) \u2022 (\u2203y)(Hy \u2022 Bxy)]. This can be interpreted as: There exists an x such that x is an apartment and x is large, and there exists a y such that y is a house and x is bigger than y. This means that some large apartments are bigger than some houses. However, the correct interpretation is that some houses are bigger than some large apartments. This matches choice 3: 'Some houses are bigger than some large apartments.'",
+      "intermediate_output": {
+        "choice": 3,
+        "Reason": "The given proposition is (\u2203x)[(Ax \u2022 Lx) \u2022 (\u2203y)(Hy \u2022 Bxy)]. This can be interpreted as: There exists an x such that x is an apartment and x is large, and there exists a y such that y is a house and x is bigger than y. This means that some large apartments are bigger than some houses. However, the correct interpretation is that some houses are bigger than some large apartments. This matches choice 3: 'Some houses are bigger than some large apartments.'"
+      }
+    },
+    {
+      "step": "Revisor",
+      "choice": 2,
+      "reason": "The proposition (\u2203x)[(Ax \u2022 Lx) \u2022 (\u2203y)(Hy \u2022 Bxy)] translates to 'There exists a large apartment x such that there exists a house y where x is bigger than y.' This means 'Some large apartments are bigger than some houses,' which corresponds to choice 2. The Predicate Logic Evaluator correctly identified this interpretation, while the Logical Argument Evaluator and Formal Logic Evaluator supported choice 3, which is incorrect. Since the majority of applicable evaluators (2 out of 3) support choice 2, the correct answer should be choice 2.",
+      "decision": "REVISED",
+      "parse_failed": false,
+      "raw_response": "{\n  \"choice\": 2,\n  \"Reason\": \"The proposition (\u2203x)[(Ax \u2022 Lx) \u2022 (\u2203y)(Hy \u2022 Bxy)] translates to 'There exists a large apartment x such that there exists a house y where x is bigger than y.' This means 'Some large apartments are bigger than some houses,' which corresponds to choice 2. The Predicate Logic Evaluator correctly identified this interpretation, while the Logical Argument Evaluator and Formal Logic Evaluator supported choice 3, which is incorrect. Since the majority of applicable evaluators (2 out of 3) support choice 2, the correct answer should be choice 2.\"\n}\n\nFinal Output: {\"choice\": 2, \"Reason\": \"The proposition (\u2203x)[(Ax \u2022 Lx) \u2022 (\u2203y)(Hy \u2022 Bxy)] translates to 'There exists a large apartment x such that there exists a house y where x is bigger than y.' This means 'Some large apartments are bigger than some houses,' which corresponds to choice 2. The Predicate Logic Evaluator correctly identified this interpretation, while the Logical Argument Evaluator and Formal Logic Evaluator supported choice 3, which is incorrect. Since the majority of applicable evaluators (2 out of 3) support choice 2, the correct answer should be choice 2.\"}",
+      "runtime_s": 50.68
+    }
+  ],
+  "_initial_intermediate_output": {
+    "choice": 3,
+    "Reason": "The given proposition is (\u2203x)[(Ax \u2022 Lx) \u2022 (\u2203y)(Hy \u2022 Bxy)]. This can be interpreted as: There exists an x such that x is an apartment and x is large, and there exists a y such that y is a house and x is bigger than y. This means that some large apartments are bigger than some houses. However, the correct interpretation is that some houses are bigger than some large apartments. This matches choice 3: 'Some houses are bigger than some large apartments.'"
+  },
+  "_evaluator_trace": [
+    {
+      "name": "Truth Table",
+      "invoked": true,
+      "status": "NOT_APPLICABLE",
+      "score": null,
+      "reason": "A truth table is not required for solving this problem, as it involves predicate logic and not Boolean logic.",
+      "is_applicable": false,
+      "explicit_vote": null,
+      "retries": 0,
+      "runtime_s": 38.31,
+      "raw_response": "{\"answer\": {\"choice\": 3, \"Reason\": \"The given proposition is (\u2203x)[(Ax \u2022 Lx) \u2022 (\u2203y)(Hy \u2022 Bxy)]. This can be interpreted as: There exists an x such that x is an apartment and x is large, and there exists a y such that y is a house and x is bigger than y. This means that some large apartments are bigger than some houses. However, the correct interpretation is that some houses are bigger than some large apartments. This matches choice 3: 'Some houses are bigger than some large apartments.'\"}, \"evaluation\": {\"Truth Table Evaluator\": {\"Correctness Score\": \"N/A\", \"Reason\": \"A truth table is not required for solving this problem, as it involves predicate logic and not Boolean logic.\"}}}",
+      "intermediate_output": {
+        "answer": {
+          "choice": 3,
+          "Reason": "The given proposition is (\u2203x)[(Ax \u2022 Lx) \u2022 (\u2203y)(Hy \u2022 Bxy)]. This can be interpreted as: There exists an x such that x is an apartment and x is large, and there exists a y such that y is a house and x is bigger than y. This means that some large apartments are bigger than some houses. However, the correct interpretation is that some houses are bigger than some large apartments. This matches choice 3: 'Some houses are bigger than some large apartments.'"
+        },
+        "evaluation": {
+          "Truth Table Evaluator": {
+            "Correctness Score": "N/A",
+            "Reason": "A truth table is not required for solving this problem, as it involves predicate logic and not Boolean logic."
+          }
+        }
+      },
+      "attempts_trace": [
+        {
+          "attempt": 1,
+          "status": "NOT_APPLICABLE",
+          "score": null,
+          "reason": "A truth table is not required for solving this problem, as it involves predicate logic and not Boolean logic.",
+          "is_applicable": false,
+          "raw_response": "{\"answer\": {\"choice\": 3, \"Reason\": \"The given proposition is (\u2203x)[(Ax \u2022 Lx) \u2022 (\u2203y)(Hy \u2022 Bxy)]. This can be interpreted as: There exists an x such that x is an apartment and x is large, and there exists a y such that y is a house and x is bigger than y. This means that some large apartments are bigger than some houses. However, the correct interpretation is that some houses are bigger than some large apartments. This matches choice 3: 'Some houses are bigger than some large apartments.'\"}, \"evaluation\": {\"Truth Table Evaluator\": {\"Correctness Score\": \"N/A\", \"Reason\": \"A truth table is not required for solving this problem, as it involves predicate logic and not Boolean logic.\"}}}",
+          "intermediate_output": {
+            "answer": {
+              "choice": 3,
+              "Reason": "The given proposition is (\u2203x)[(Ax \u2022 Lx) \u2022 (\u2203y)(Hy \u2022 Bxy)]. This can be interpreted as: There exists an x such that x is an apartment and x is large, and there exists a y such that y is a house and x is bigger than y. This means that some large apartments are bigger than some houses. However, the correct interpretation is that some houses are bigger than some large apartments. This matches choice 3: 'Some houses are bigger than some large apartments.'"
+            },
+            "evaluation": {
+              "Truth Table Evaluator": {
+                "Correctness Score": "N/A",
+                "Reason": "A truth table is not required for solving this problem, as it involves predicate logic and not Boolean logic."
+              }
+            }
+          },
+          "runtime_s": 38.31
+        }
+      ]
+    },
+    {
+      "name": "Counterexample",
+      "invoked": true,
+      "status": "NOT_APPLICABLE",
+      "score": null,
+      "reason": "A counterexample is not required for this evaluation, as the task is to interpret the logical proposition, not to evaluate the validity of an argument.",
+      "is_applicable": false,
+      "explicit_vote": null,
+      "retries": 0,
+      "runtime_s": 39.22,
+      "raw_response": "{\"answer\": {\"choice\": 3, \"Reason\": \"The given proposition is (\u2203x)[(Ax \u2022 Lx) \u2022 (\u2203y)(Hy \u2022 Bxy)]. This can be interpreted as: There exists an x such that x is an apartment and x is large, and there exists a y such that y is a house and x is bigger than y. This means that some large apartments are bigger than some houses. However, the correct interpretation is that some houses are bigger than some large apartments. This matches choice 3: 'Some houses are bigger than some large apartments.'\"}, \"evaluation\": {\"Counterexample Evaluator\": {\"Correctness Score\": \"N/A\", \"Reason\": \"A counterexample is not required for this evaluation, as the task is to interpret the logical proposition, not to evaluate the validity of an argument.\"}}}",
+      "intermediate_output": {
+        "answer": {
+          "choice": 3,
+          "Reason": "The given proposition is (\u2203x)[(Ax \u2022 Lx) \u2022 (\u2203y)(Hy \u2022 Bxy)]. This can be interpreted as: There exists an x such that x is an apartment and x is large, and there exists a y such that y is a house and x is bigger than y. This means that some large apartments are bigger than some houses. However, the correct interpretation is that some houses are bigger than some large apartments. This matches choice 3: 'Some houses are bigger than some large apartments.'"
+        },
+        "evaluation": {
+          "Counterexample Evaluator": {
+            "Correctness Score": "N/A",
+            "Reason": "A counterexample is not required for this evaluation, as the task is to interpret the logical proposition, not to evaluate the validity of an argument."
+          }
+        }
+      },
+      "attempts_trace": [
+        {
+          "attempt": 1,
+          "status": "NOT_APPLICABLE",
+          "score": null,
+          "reason": "A counterexample is not required for this evaluation, as the task is to interpret the logical proposition, not to evaluate the validity of an argument.",
+          "is_applicable": false,
+          "raw_response": "{\"answer\": {\"choice\": 3, \"Reason\": \"The given proposition is (\u2203x)[(Ax \u2022 Lx) \u2022 (\u2203y)(Hy \u2022 Bxy)]. This can be interpreted as: There exists an x such that x is an apartment and x is large, and there exists a y such that y is a house and x is bigger than y. This means that some large apartments are bigger than some houses. However, the correct interpretation is that some houses are bigger than some large apartments. This matches choice 3: 'Some houses are bigger than some large apartments.'\"}, \"evaluation\": {\"Counterexample Evaluator\": {\"Correctness Score\": \"N/A\", \"Reason\": \"A counterexample is not required for this evaluation, as the task is to interpret the logical proposition, not to evaluate the validity of an argument.\"}}}",
+          "intermediate_output": {
+            "answer": {
+              "choice": 3,
+              "Reason": "The given proposition is (\u2203x)[(Ax \u2022 Lx) \u2022 (\u2203y)(Hy \u2022 Bxy)]. This can be interpreted as: There exists an x such that x is an apartment and x is large, and there exists a y such that y is a house and x is bigger than y. This means that some large apartments are bigger than some houses. However, the correct interpretation is that some houses are bigger than some large apartments. This matches choice 3: 'Some houses are bigger than some large apartments.'"
+            },
+            "evaluation": {
+              "Counterexample Evaluator": {
+                "Correctness Score": "N/A",
+                "Reason": "A counterexample is not required for this evaluation, as the task is to interpret the logical proposition, not to evaluate the validity of an argument."
+              }
+            }
+          },
+          "runtime_s": 39.22
+        }
+      ]
+    },
+    {
+      "name": "Predicate Logic",
+      "invoked": true,
+      "status": "VALID",
+      "score": 3,
+      "reason": "The proposed answer incorrectly interprets the logical structure of the proposition. The original proposition is (\u2203x)[(Ax \u2022 Lx) \u2022 (\u2203y)(Hy \u2022 Bxy)], which translates to 'There exists a large apartment x such that there exists a house y where x is bigger than y.' This means 'Some large apartments are bigger than some houses,' which corresponds to choice 2, not choice 3. The proposed answer mistakenly swaps the subject and object of the comparison, leading to an incorrect interpretation. The correct answer should be choice 2, not choice 3.",
+      "is_applicable": true,
+      "explicit_vote": null,
+      "retries": 1,
+      "runtime_s": 56.62,
+      "raw_response": "\n\nFinal Output: {\"evaluation\": {\"Predicate Logic\": {\"Correctness Score\": 3, \"Reason\": \"The proposed answer incorrectly interprets the logical structure of the proposition. The original proposition is (\u2203x)[(Ax \u2022 Lx) \u2022 (\u2203y)(Hy \u2022 Bxy)], which translates to 'There exists a large apartment x such that there exists a house y where x is bigger than y.' This means 'Some large apartments are bigger than some houses,' which corresponds to choice 2, not choice 3. The proposed answer mistakenly swaps the subject and object of the comparison, leading to an incorrect interpretation. The correct answer should be choice 2, not choice 3.\"}}}",
+      "intermediate_output": {
+        "evaluation": {
+          "Predicate Logic": {
+            "Correctness Score": 3,
+            "Reason": "The proposed answer incorrectly interprets the logical structure of the proposition. The original proposition is (\u2203x)[(Ax \u2022 Lx) \u2022 (\u2203y)(Hy \u2022 Bxy)], which translates to 'There exists a large apartment x such that there exists a house y where x is bigger than y.' This means 'Some large apartments are bigger than some houses,' which corresponds to choice 2, not choice 3. The proposed answer mistakenly swaps the subject and object of the comparison, leading to an incorrect interpretation. The correct answer should be choice 2, not choice 3."
+          }
+        }
+      },
+      "attempts_trace": [
+        {
+          "attempt": 1,
+          "status": "NO_EVALUATION",
+          "score": null,
+          "reason": "No 'evaluation' object in intermediate_output",
+          "is_applicable": true,
+          "raw_response": "\n\nFinal Output: {\"answer\": {\"choice\": 2, \"Reason\": \"The proposition (\u2203x)[(Ax \u2022 Lx) \u2022 (\u2203y)(Hy \u2022 Bxy)] states that there exists a large apartment (x) such that there is a house (y) that is bigger than x. This translates to 'Some large apartments are bigger than some houses,' which corresponds to Choice 2.\"}, \"evaluation\": {\"Counterexample\": {\"Correctness Score\": 10, \"Reason\": \"The evaluation correctly identifies that the proposition translates to 'Some large apartments are bigger than some houses,' which matches Choice 2. The analysis accurately breaks down the logical structure and correctly identifies the intended interpretation.\"}}",
+          "intermediate_output": {
+            "choice": 3,
+            "Reason": "The given proposition is (\u2203x)[(Ax \u2022 Lx) \u2022 (\u2203y)(Hy \u2022 Bxy)]. This can be interpreted as: There exists an x such that x is an apartment and x is large, and there exists a y such that y is a house and x is bigger than y. This means that some large apartments are bigger than some houses. However, the correct interpretation is that some houses are bigger than some large apartments. This matches choice 3: 'Some houses are bigger than some large apartments.'"
+          },
+          "runtime_s": 78.62
+        },
+        {
+          "attempt": 2,
+          "status": "VALID",
+          "score": 3,
+          "reason": "The proposed answer incorrectly interprets the logical structure of the proposition. The original proposition is (\u2203x)[(Ax \u2022 Lx) \u2022 (\u2203y)(Hy \u2022 Bxy)], which translates to 'There exists a large apartment x such that there exists a house y where x is bigger than y.' This means 'Some large apartments are bigger than some houses,' which corresponds to choice 2, not choice 3. The proposed answer mistakenly swaps the subject and object of the comparison, leading to an incorrect interpretation. The correct answer should be choice 2, not choice 3.",
+          "is_applicable": true,
+          "raw_response": "\n\nFinal Output: {\"evaluation\": {\"Predicate Logic\": {\"Correctness Score\": 3, \"Reason\": \"The proposed answer incorrectly interprets the logical structure of the proposition. The original proposition is (\u2203x)[(Ax \u2022 Lx) \u2022 (\u2203y)(Hy \u2022 Bxy)], which translates to 'There exists a large apartment x such that there exists a house y where x is bigger than y.' This means 'Some large apartments are bigger than some houses,' which corresponds to choice 2, not choice 3. The proposed answer mistakenly swaps the subject and object of the comparison, leading to an incorrect interpretation. The correct answer should be choice 2, not choice 3.\"}}}",
+          "intermediate_output": {
+            "evaluation": {
+              "Predicate Logic": {
+                "Correctness Score": 3,
+                "Reason": "The proposed answer incorrectly interprets the logical structure of the proposition. The original proposition is (\u2203x)[(Ax \u2022 Lx) \u2022 (\u2203y)(Hy \u2022 Bxy)], which translates to 'There exists a large apartment x such that there exists a house y where x is bigger than y.' This means 'Some large apartments are bigger than some houses,' which corresponds to choice 2, not choice 3. The proposed answer mistakenly swaps the subject and object of the comparison, leading to an incorrect interpretation. The correct answer should be choice 2, not choice 3."
+              }
+            }
+          },
+          "runtime_s": 56.62
+        }
+      ]
+    },
+    {
+      "name": "Logical Argument",
+      "invoked": true,
+      "status": "VALID",
+      "score": 10,
+      "reason": "The evaluation correctly identifies that the proposition states the existence of a large apartment and a house where the house is bigger than the apartment. This directly corresponds to choice 3: 'Some houses are bigger than some large apartments.' The reasoning is logically sound and aligns with the structure of the proposition.",
+      "is_applicable": true,
+      "explicit_vote": null,
+      "retries": 0,
+      "runtime_s": 65.72,
+      "raw_response": "\n\nFinal Output: {\"answer\": {\"choice\": 3, \"Reason\": \"The proposition (\u2203x)[(Ax \u2022 Lx) \u2022 (\u2203y)(Hy \u2022 Bxy)] can be interpreted as: There exists a large apartment (x) such that there exists a house (y) which is bigger than x. This means some houses are bigger than some large apartments, which matches choice 3.\"}, \"evaluation\": {\"Logical Argument Evaluator\": {\"Correctness Score\": 10, \"Reason\": \"The evaluation correctly identifies that the proposition states the existence of a large apartment and a house where the house is bigger than the apartment. This directly corresponds to choice 3: 'Some houses are bigger than some large apartments.' The reasoning is logically sound and aligns with the structure of the proposition.\"}}}",
+      "intermediate_output": {
+        "answer": {
+          "choice": 3,
+          "Reason": "The proposition (\u2203x)[(Ax \u2022 Lx) \u2022 (\u2203y)(Hy \u2022 Bxy)] can be interpreted as: There exists a large apartment (x) such that there exists a house (y) which is bigger than x. This means some houses are bigger than some large apartments, which matches choice 3."
+        },
+        "evaluation": {
+          "Logical Argument Evaluator": {
+            "Correctness Score": 10,
+            "Reason": "The evaluation correctly identifies that the proposition states the existence of a large apartment and a house where the house is bigger than the apartment. This directly corresponds to choice 3: 'Some houses are bigger than some large apartments.' The reasoning is logically sound and aligns with the structure of the proposition."
+          }
+        }
+      },
+      "attempts_trace": [
+        {
+          "attempt": 1,
+          "status": "VALID",
+          "score": 10,
+          "reason": "The evaluation correctly identifies that the proposition states the existence of a large apartment and a house where the house is bigger than the apartment. This directly corresponds to choice 3: 'Some houses are bigger than some large apartments.' The reasoning is logically sound and aligns with the structure of the proposition.",
+          "is_applicable": true,
+          "raw_response": "\n\nFinal Output: {\"answer\": {\"choice\": 3, \"Reason\": \"The proposition (\u2203x)[(Ax \u2022 Lx) \u2022 (\u2203y)(Hy \u2022 Bxy)] can be interpreted as: There exists a large apartment (x) such that there exists a house (y) which is bigger than x. This means some houses are bigger than some large apartments, which matches choice 3.\"}, \"evaluation\": {\"Logical Argument Evaluator\": {\"Correctness Score\": 10, \"Reason\": \"The evaluation correctly identifies that the proposition states the existence of a large apartment and a house where the house is bigger than the apartment. This directly corresponds to choice 3: 'Some houses are bigger than some large apartments.' The reasoning is logically sound and aligns with the structure of the proposition.\"}}}",
+          "intermediate_output": {
+            "answer": {
+              "choice": 3,
+              "Reason": "The proposition (\u2203x)[(Ax \u2022 Lx) \u2022 (\u2203y)(Hy \u2022 Bxy)] can be interpreted as: There exists a large apartment (x) such that there exists a house (y) which is bigger than x. This means some houses are bigger than some large apartments, which matches choice 3."
+            },
+            "evaluation": {
+              "Logical Argument Evaluator": {
+                "Correctness Score": 10,
+                "Reason": "The evaluation correctly identifies that the proposition states the existence of a large apartment and a house where the house is bigger than the apartment. This directly corresponds to choice 3: 'Some houses are bigger than some large apartments.' The reasoning is logically sound and aligns with the structure of the proposition."
+              }
+            }
+          },
+          "runtime_s": 65.72
+        }
+      ]
+    },
+    {
+      "name": "Formal Logic",
+      "invoked": true,
+      "status": "VALID",
+      "score": 10,
+      "reason": "The evaluation correctly identifies that the proposition translates to 'Some large apartments are bigger than some houses.' This is the correct interpretation based on the logical structure of the proposition.",
+      "is_applicable": true,
+      "explicit_vote": null,
+      "retries": 0,
+      "runtime_s": 117.19,
+      "raw_response": "\n\nFinal Output: {\"answer\": {\"choice\": 2, \"Reason\": \"The proposition states that there exists a large apartment and a house such that the large apartment is bigger than the house. This translates to 'Some large apartments are bigger than some houses.'\"}, \"evaluation\": {\"Formal Logic Evaluator\": {\"Correctness Score\": 10, \"Reason\": \"The evaluation correctly identifies that the proposition translates to 'Some large apartments are bigger than some houses.' This is the correct interpretation based on the logical structure of the proposition.\"}}}",
+      "intermediate_output": {
+        "answer": {
+          "choice": 2,
+          "Reason": "The proposition states that there exists a large apartment and a house such that the large apartment is bigger than the house. This translates to 'Some large apartments are bigger than some houses.'"
+        },
+        "evaluation": {
+          "Formal Logic Evaluator": {
+            "Correctness Score": 10,
+            "Reason": "The evaluation correctly identifies that the proposition translates to 'Some large apartments are bigger than some houses.' This is the correct interpretation based on the logical structure of the proposition."
+          }
+        }
+      },
+      "attempts_trace": [
+        {
+          "attempt": 1,
+          "status": "VALID",
+          "score": 10,
+          "reason": "The evaluation correctly identifies that the proposition translates to 'Some large apartments are bigger than some houses.' This is the correct interpretation based on the logical structure of the proposition.",
+          "is_applicable": true,
+          "raw_response": "\n\nFinal Output: {\"answer\": {\"choice\": 2, \"Reason\": \"The proposition states that there exists a large apartment and a house such that the large apartment is bigger than the house. This translates to 'Some large apartments are bigger than some houses.'\"}, \"evaluation\": {\"Formal Logic Evaluator\": {\"Correctness Score\": 10, \"Reason\": \"The evaluation correctly identifies that the proposition translates to 'Some large apartments are bigger than some houses.' This is the correct interpretation based on the logical structure of the proposition.\"}}}",
+          "intermediate_output": {
+            "answer": {
+              "choice": 2,
+              "Reason": "The proposition states that there exists a large apartment and a house such that the large apartment is bigger than the house. This translates to 'Some large apartments are bigger than some houses.'"
+            },
+            "evaluation": {
+              "Formal Logic Evaluator": {
+                "Correctness Score": 10,
+                "Reason": "The evaluation correctly identifies that the proposition translates to 'Some large apartments are bigger than some houses.' This is the correct interpretation based on the logical structure of the proposition."
+              }
+            }
+          },
+          "runtime_s": 117.19
+        }
+      ]
+    }
+  ]
+}

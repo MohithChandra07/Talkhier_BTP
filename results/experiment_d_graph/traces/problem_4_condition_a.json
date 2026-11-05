@@ -1,0 +1,96 @@
+{
+  "problem_id": 4,
+  "condition": "Condition_A_Original",
+  "ground_truth": 1,
+  "a0_choice": 0,
+  "final_choice": 0,
+  "a0_correct": false,
+  "final_correct": false,
+  "answer_changed": false,
+  "all_five_evaluators_invoked": false,
+  "evaluators_invoked_count": 0,
+  "invoked_evaluators_list": [],
+  "executed_agents_trace": [
+    "Default Supervisor",
+    "Answer Generator",
+    "Default Supervisor",
+    "Evaluator Supervisor",
+    "Default Supervisor"
+  ],
+  "valid_scores_count": 0,
+  "individual_scores": {
+    "Truth Table": null,
+    "Counterexample": null,
+    "Predicate Logic": null,
+    "Logical Argument": null,
+    "Formal Logic": null
+  },
+  "mean_score": null,
+  "revisor_decision": "RETAINED",
+  "revision_quality": "NEUTRAL_RETAINED_INCORRECT",
+  "runtime_s": 239.4,
+  "raw_final_output": {
+    "answer": {
+      "choice": 0,
+      "Reason": "The formula (~B \u2022 E) \u2283 D translates to: If it's not the case that both Izzy plays Minecraft and Ashleigh stops by, then Russell makes dinner. This matches choice 0, which states the same condition."
+    }
+  },
+  "revision_history": [
+    {
+      "agent": "Default Supervisor",
+      "choice": 0,
+      "intermediate_output": {
+        "answer": {
+          "choice": 0,
+          "Reason": "The formula (~B \u2022 E) \u2283 D translates to: If it's not the case that both Izzy plays Minecraft and Ashleigh stops by, then Russell makes dinner. This matches choice 0, which states the same condition."
+        }
+      }
+    },
+    {
+      "agent": "Answer Generator",
+      "choice": 0,
+      "intermediate_output": {
+        "answer": {
+          "choice": 0,
+          "Reason": "The formula (~B \u2022 E) \u2283 D translates to: If it's not the case that both Izzy plays Minecraft and Ashleigh stops by, then Russell makes dinner. This matches choice 0, which states the same condition."
+        }
+      }
+    },
+    {
+      "agent": "Default Supervisor",
+      "choice": 0,
+      "intermediate_output": {
+        "answer": {
+          "choice": 0,
+          "Reason": "The formula (~B \u2022 E) \u2283 D translates to: If it's not the case that both Izzy plays Minecraft and Ashleigh stops by, then Russell makes dinner. This matches choice 0, which states the same condition."
+        }
+      }
+    },
+    {
+      "agent": "Evaluator Supervisor",
+      "choice": 0,
+      "intermediate_output": {
+        "answer": {
+          "choice": 0,
+          "Reason": "The formula (~B \u2022 E) \u2283 D translates to: If it's not the case that both Izzy plays Minecraft and Ashleigh stops by, then Russell makes dinner. This matches choice 0, which states the same condition."
+        },
+        "evaluation": {
+          "Formal Logic Evaluator": {
+            "Correctness Score": 10,
+            "Reason": "The translation is accurate and syntactically correct. The negation applies to the conjunction, and the implication is properly captured in the natural language sentence."
+          }
+        }
+      }
+    },
+    {
+      "agent": "Default Supervisor",
+      "choice": 0,
+      "intermediate_output": {
+        "answer": {
+          "choice": 0,
+          "Reason": "The formula (~B \u2022 E) \u2283 D translates to: If it's not the case that both Izzy plays Minecraft and Ashleigh stops by, then Russell makes dinner. This matches choice 0, which states the same condition."
+        }
+      }
+    }
+  ]
+}

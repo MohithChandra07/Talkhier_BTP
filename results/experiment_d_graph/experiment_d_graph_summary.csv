@@ -3,3 +3,9 @@ problem_id,condition,ground_truth,a0_choice,final_choice,a0_correct,final_correc
 0,Condition_B_Graph_Dispatch,3,2,3,False,True,True,True,5,4,5.75,REVISED,HELPFUL,357.04,,10,10,0,3
 1,Condition_A_Original,0,0,0,True,True,False,False,0,0,,RETAINED,NEUTRAL_RETAINED_CORRECT,225.2,,,,,
 1,Condition_B_Graph_Dispatch,0,1,0,False,True,True,True,5,4,8.75,REVISED,HELPFUL,317.27,10,,5,10,10
+2,Condition_A_Original,2,2,2,True,True,False,False,0,0,,RETAINED,NEUTRAL_RETAINED_CORRECT,656.1,,,,,
+2,Condition_B_Graph_Dispatch,2,3,2,False,True,True,True,5,3,7.67,REVISED,HELPFUL,472.41,,,3,10,10
+3,Condition_A_Original,0,0,0,True,True,False,False,0,0,,RETAINED,NEUTRAL_RETAINED_CORRECT,2460.0,,,,,
+3,Condition_B_Graph_Dispatch,0,0,2,True,False,True,True,5,4,1.25,REVISED,HARMFUL,437.89,5,,0,0,0
+4,Condition_A_Original,1,0,0,False,False,False,False,0,0,,RETAINED,NEUTRAL_RETAINED_INCORRECT,239.4,,,,,
+4,Condition_B_Graph_Dispatch,1,0,0,False,False,False,True,5,3,10.0,RETAINED,NEUTRAL_RETAINED_INCORRECT,335.07,,,10,10,10
