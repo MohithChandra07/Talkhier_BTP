@@ -108,14 +108,19 @@ def extract_propositional_argument(question_text: str) -> Tuple[Optional[List[st
         line = lines[i]
         # Ignore instructional headers
         if any(w in line.lower() for w in [
-            "construct", "determine", "truth table", "argument", "following", "consider", "using", "select", "translate"
+            "construct", "determine", "truth table", "argument", "following", "consider", "using", "select", "translate", "indirect"
         ]):
             continue
         if line:
-            premises.append(line)
+            # Clean symbols: middle dot to bullet, brackets to parens
+            clean_p = line.replace("·", "•").replace("[", "(").replace("]", ")")
+            premises.append(clean_p)
 
     if left_part:
-        premises.append(left_part)
+        clean_lp = left_part.replace("·", "•").replace("[", "(").replace("]", ")")
+        premises.append(clean_lp)
+
+    clean_concl = conclusion.replace("·", "•").replace("[", "(").replace("]", ")")
 
     if not premises:
         return None, None, "PARSE_FAILURE", "No premises found before conclusion."
@@ -125,23 +130,31 @@ def extract_propositional_argument(question_text: str) -> Tuple[Optional[List[st
         if _is_unsupported(p):
             return None, None, "NOT_APPLICABLE", f"Premise {p!r} involves non-propositional logic or natural language."
 
-    if _is_unsupported(conclusion):
-        return None, None, "NOT_APPLICABLE", f"Conclusion {conclusion!r} involves non-propositional logic or natural language."
+    if _is_unsupported(clean_concl):
+        return None, None, "NOT_APPLICABLE", f"Conclusion {clean_concl!r} involves non-propositional logic or natural language."
 
     # Validate that formulas can be parsed by SymPy engine
     try:
         for p in premises:
             parse_to_sympy(p)
-        parse_to_sympy(conclusion)
+        parse_to_sympy(clean_concl)
     except Exception as e:
         return None, None, "PARSE_FAILURE", f"Formula parse validation failed: {e}"
 
-    return premises, conclusion, "OK", "Successfully extracted and validated propositional argument."
+    return premises, clean_concl, "OK", "Successfully extracted and validated propositional argument."
 
 
 def extract_choice_candidate_assignment(choice_text: str) -> Tuple[Optional[Dict[str, bool]], bool, str]:
     """
     Parses a multiple-choice option to extract candidate truth assignment and validity claim.
+
+    Handles natural English phrasing in formal logic benchmarks (e.g. MMLU), such as:
+    - 'Valid'
+    - 'Invalid. Counterexample when G and H are true'
+    - 'Invalid. Counterexample when H and I are true and J is false'
+    - 'Invalid. Counterexample when P, R, and Q are true'
+    - 'Invalid. Counterexample when L, M, O, Q, and R are true and N and P are false'
+    - 'Invalid: G = true, H = false'
 
     Returns: (assignment, is_valid_claim, choice_type)
     - choice_type: 'VALID', 'INVALID_COUNTEREXAMPLE', 'INVALID_UNSPECIFIED', 'OTHER'
@@ -153,17 +166,29 @@ def extract_choice_candidate_assignment(choice_text: str) -> Tuple[Optional[Dict
     if not re.search(r"\binvalid\b", text, re.I):
         return None, False, "OTHER"
 
-    # Pattern 1: 'G and H are true' or 'G and H are false'
-    m1 = re.search(r"([A-Za-z])\s+and\s+([A-Za-z])\s+are\s+(true|false|t|f)", text, re.I)
-    if m1:
-        val = m1.group(3).lower() in ("true", "t")
-        return {m1.group(1).upper(): val, m1.group(2).upper(): val}, False, "INVALID_COUNTEREXAMPLE"
+    assign: Dict[str, bool] = {}
 
-    # Pattern 2: 'G is true and H is false' or 'G = true, H = false'
-    matches = re.findall(r"([A-Za-z])\s+(?:is|=|==|:)\s*(true|false|t|f)", text, re.I)
-    if matches:
-        assign = {var.upper(): (val.lower() in ("true", "t")) for var, val in matches}
-        return assign, False, "INVALID_COUNTEREXAMPLE"
+    # Split text after 'when' or ':' if present
+    after_when = re.split(r"\bwhen\b|:", text, flags=re.I)
+    body = after_when[-1] if len(after_when) > 1 else text
+
+    # Extract clauses: e.g. "H and I are true", "J is false", "G = True, H = False"
+    clauses = re.findall(
+        r"([^,]+?(?:,\s*[^,]+?)*?)\s+(?:is|are|=|==)\s*(true|false|t|f)",
+        body,
+        flags=re.I,
+    )
+
+    if clauses:
+        for var_part, val_str in clauses:
+            val = val_str.lower() in ("true", "t")
+            # Extract variables (single letters, e.g. A, B, C, ... Z)
+            vars_found = re.findall(r"\b[A-Za-z]\b", var_part)
+            for v in vars_found:
+                assign[v.upper()] = val
+
+        if assign:
+            return assign, False, "INVALID_COUNTEREXAMPLE"
 
     return None, False, "INVALID_UNSPECIFIED"
 
@@ -350,12 +375,18 @@ def build_sprint4_graph_dispatch_team(
     prompt: Dict[str, Any],
     react_generator: ReactAgent,
     problem: Dict[str, Any],
+    inject_evaluator_evidence: bool = True,
+    enable_revisor_override: bool = True,
 ):
     """
     Constructs the Sprint 4 LangGraph sequential pipeline:
     START -> Answer Generator -> Evaluator Prep -> Deterministic Verifier ->
     Truth Table -> Counterexample -> Predicate Logic -> Logical Argument ->
     Formal Logic -> Aggregator -> Revisor -> END.
+
+    Parameters:
+    - inject_evaluator_evidence: Whether to augment Truth Table & Counterexample evaluator contexts with SAT proof.
+    - enable_revisor_override: Whether the Revisor hard override gate is active.
     """
     workflow = StateGraph(GraphAgentStateSprint4)
 
@@ -445,9 +476,9 @@ def build_sprint4_graph_dispatch_team(
     def deterministic_verifier_runner(state: GraphAgentStateSprint4):
         det_evidence = run_deterministic_verification(problem)
 
-        # Inject deterministic proof into Truth Table and Counterexample prompts if proof exists
         new_history = dict(state["history"])
-        if det_evidence.get("has_authoritative_proof", False):
+        # Inject deterministic proof into Truth Table and Counterexample prompts only if enabled
+        if inject_evaluator_evidence and det_evidence.get("has_authoritative_proof", False):
             proof_summary = (
                 f"\n\n### 🛡️ Precomputed Deterministic Logic Verification (SymPy):\n"
                 f"- Argument Validity: {det_evidence['status']}\n"
@@ -582,7 +613,7 @@ def build_sprint4_graph_dispatch_team(
             revisor_reason = "Revisor output unparseable; fallback to A0."
 
         # DETERMINISTIC OVERRIDE GATE
-        if has_det_proof and proven_choice is not None:
+        if enable_revisor_override and has_det_proof and proven_choice is not None:
             if revisor_choice != proven_choice:
                 # Override LLM revisor error with mathematical proof
                 final_choice = proven_choice
@@ -595,6 +626,16 @@ def build_sprint4_graph_dispatch_team(
             else:
                 final_choice = proven_choice
                 final_reason = revisor_reason or f"Confirmed by SymPy deterministic proof: {det_evidence['reason']}"
+                decision = "REVISED" if final_choice != a0_choice else "RETAINED"
+        elif not enable_revisor_override and has_det_proof and proven_choice is not None:
+            # Hard override disabled (Ablation B): Revisor received evidence, but its choice is respected
+            if parse_failed:
+                final_choice = a0_choice
+                final_reason = revisor_reason
+                decision = "PARSE_FAILURE_RETAINED_A0"
+            else:
+                final_choice = revisor_choice
+                final_reason = revisor_reason
                 decision = "REVISED" if final_choice != a0_choice else "RETAINED"
         else:
             # Fallback path: preserve A0 on parse failure or use Revisor decision

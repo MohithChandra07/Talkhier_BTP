@@ -1,0 +1,6 @@
+problem_id,ground_truth,full_sprint4_choice,full_sprint4_correct,full_sprint4_quality,ablation_a_no_eval_evidence_choice,ablation_a_correct,ablation_a_quality,ablation_b_no_override_choice,ablation_b_correct,ablation_b_quality
+6,3,3,True,HELPFUL,3,True,HELPFUL,3,True,HELPFUL
+20,1,1,True,HELPFUL,1,True,HELPFUL,1,True,HELPFUL
+23,2,2,True,HELPFUL,2,True,HELPFUL,2,True,HELPFUL
+31,0,0,True,HELPFUL,0,True,HELPFUL,0,True,HELPFUL
+35,2,2,True,HELPFUL,2,True,HELPFUL,2,True,HELPFUL

@@ -1,0 +1,7 @@
+problem_id,domain_type,condition,ground_truth,a0_choice,final_choice,a0_correct,final_correct,answer_changed,deterministic_status,has_authoritative_proof,proven_choice_index,deterministic_override,revisor_decision,revision_quality,evaluators_invoked_count,applicable_count,valid_scores_count,not_applicable_count,mean_score,total_evaluator_retries,runtime_s
+20,TARGET_PROPOSITIONAL,sprint3_opt,1,3,0,False,False,True,NOT_APPLICABLE,False,,False,REVISED,NEUTRAL_REVISED_INCORRECT,5,4,4,1,3.75,0,256.36
+23,TARGET_PROPOSITIONAL,sprint3_opt,2,1,1,False,False,False,NOT_APPLICABLE,False,,False,RETAINED,NEUTRAL_RETAINED_INCORRECT,5,5,5,0,5.4,0,259.99
+29,TARGET_PROPOSITIONAL,sprint3_opt,0,0,0,True,True,False,NOT_APPLICABLE,False,,False,RETAINED,NEUTRAL_RETAINED_CORRECT,5,4,4,1,1.25,0,479.29
+31,TARGET_PROPOSITIONAL,sprint3_opt,0,1,1,False,False,False,NOT_APPLICABLE,False,,False,RETAINED,NEUTRAL_RETAINED_INCORRECT,5,5,5,0,9.6,0,249.85
+35,TARGET_PROPOSITIONAL,sprint3_opt,2,0,2,False,True,True,NOT_APPLICABLE,False,,False,REVISED,HELPFUL,5,4,4,1,4.25,0,410.64
+36,TARGET_PROPOSITIONAL,sprint3_opt,1,1,1,True,True,False,NOT_APPLICABLE,False,,False,RETAINED,NEUTRAL_RETAINED_CORRECT,5,5,5,0,8.8,0,255.56

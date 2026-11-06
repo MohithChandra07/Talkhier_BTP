@@ -67,6 +67,18 @@ class TestGraphDispatchSprint4(unittest.TestCase):
         _, _, status3, _ = extract_propositional_argument(q3)
         self.assertEqual(status3, "PARSE_FAILURE")
 
+    def test_extract_propositional_argument_middle_dot_and_brackets(self):
+        """Verify middle dot · and brackets [ ] are normalized properly (e.g. Problem 6, Problem 97)."""
+        q = (
+            "Determine whether the argument is valid or invalid.\n"
+            "~E · F\n"
+            "[(E ∨ G) · (E ∨ H)] / G · H"
+        )
+        prems, concl, status, reason = extract_propositional_argument(q)
+        self.assertEqual(status, "OK")
+        self.assertEqual(prems, ["~E • F", "((E ∨ G) • (E ∨ H))"])
+        self.assertEqual(concl, "G • H")
+
     # =========================================================================
     # 2. Choice Candidate Assignment Extraction Tests
     # =========================================================================
@@ -277,6 +289,105 @@ class TestGraphDispatchSprint4(unittest.TestCase):
         }
         for n in expected_nodes:
             self.assertIn(n, node_names)
+
+    def test_ablation_no_revisor_override(self):
+        """Verify that with enable_revisor_override=False, Revisor choice is NOT overridden."""
+        problem = {
+            "question": "Construct a truth table.\n~G ⊃ H\n~H / G",
+            "choices": ["Valid", "Invalid: G=T, H=T", "Invalid: G=F, H=T", "Invalid: G=F, H=F"],
+        }
+        class MockReactAgent:
+            def loadMember(self, name, tools, prompt, supervisor_name):
+                def member(state):
+                    if name == "Revisor":
+                        return {"messages": AIMessage(content=""), "intermediate_output": {"choice": 2, "Reason": "Erroneous Revisor"}}
+                    return {"messages": AIMessage(content=""), "intermediate_output": {"choice": 1, "Reason": "A0"}}
+                return member
+
+        prompt_dict = {
+            "team": {
+                "Answer Generator": {"tools": [], "prompt": "AG prompt"},
+                "Evaluator": {k: {"tools": [], "prompt": f"{k} prompt"} for k in EVALUATOR_NAMES_FORMAL_LOGIC},
+                "Revisor": {"tools": [], "prompt": "Rev prompt"},
+            }
+        }
+
+        # Build graph with enable_revisor_override=False (Ablation B)
+        graph = build_sprint4_graph_dispatch_team(
+            prompt_dict, MockReactAgent(), problem,
+            inject_evaluator_evidence=True,
+            enable_revisor_override=False
+        )
+        init_state = {
+            "history": {},
+            "messages": HumanMessage(content="Start"),
+            "background": AIMessage(content=""),
+            "intermediate_output": {},
+            "next": "Answer Generator",
+            "initial_prompt": prompt_dict,
+            "_initial_intermediate_output": {},
+            "_evaluator_trace": [],
+            "_individual_evaluations": {},
+            "_evaluation_aggregation": {},
+            "_deterministic_evidence": {},
+            "_revision_history": [],
+        }
+
+        res = graph.invoke(init_state)
+        # Revisor choice 2 should be preserved because hard override is disabled!
+        self.assertEqual(res["intermediate_output"]["choice"], 2)
+        rev_history = [h for h in res["_revision_history"] if h["step"] == "Revisor"][0]
+        self.assertEqual(rev_history["decision"], "REVISED")
+        self.assertFalse(rev_history["deterministic_override"])
+
+    def test_ablation_no_evaluator_evidence(self):
+        """Verify that with inject_evaluator_evidence=False, Evaluator prompts are not modified."""
+        problem = {
+            "question": "Construct a truth table.\n~G ⊃ H\n~H / G",
+            "choices": ["Valid", "Invalid: G=T, H=T", "Invalid: G=F, H=T", "Invalid: G=F, H=F"],
+        }
+        captured_history = {}
+
+        class MockReactAgent:
+            def loadMember(self, name, tools, prompt, supervisor_name):
+                def member(state):
+                    if name == "Truth Table":
+                        captured_history["Truth Table"] = [m.content for m in state.get("history", {}).get("Truth Table", [])]
+                    return {"messages": AIMessage(content=""), "intermediate_output": {"choice": 0, "Reason": "Mock"}}
+                return member
+
+        prompt_dict = {
+            "team": {
+                "Answer Generator": {"tools": [], "prompt": "AG prompt"},
+                "Evaluator": {k: {"tools": [], "prompt": f"{k} prompt"} for k in EVALUATOR_NAMES_FORMAL_LOGIC},
+                "Revisor": {"tools": [], "prompt": "Rev prompt"},
+            }
+        }
+
+        # Build graph with inject_evaluator_evidence=False (Ablation A)
+        graph = build_sprint4_graph_dispatch_team(
+            prompt_dict, MockReactAgent(), problem,
+            inject_evaluator_evidence=False,
+            enable_revisor_override=True
+        )
+        init_state = {
+            "history": {},
+            "messages": HumanMessage(content="Start"),
+            "background": AIMessage(content=""),
+            "intermediate_output": {},
+            "next": "Answer Generator",
+            "initial_prompt": prompt_dict,
+            "_initial_intermediate_output": {},
+            "_evaluator_trace": [],
+            "_individual_evaluations": {},
+            "_evaluation_aggregation": {},
+            "_deterministic_evidence": {},
+            "_revision_history": [],
+        }
+
+        res = graph.invoke(init_state)
+        tt_contents = " ".join(captured_history.get("Truth Table", []))
+        self.assertNotIn("Precomputed Deterministic Logic Verification", tt_contents)
 
 
 if __name__ == "__main__":
