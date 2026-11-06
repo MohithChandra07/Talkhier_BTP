@@ -1,0 +1,6 @@
+problem_id,ground_truth,cond_a_final,cond_a_correct,s3_base_final,s3_base_correct,s3_base_quality,s3_opt_final,s3_opt_correct,s3_opt_quality,s3_opt_runtime_s,s4_a0,s4_final,s4_correct,s4_det_status,s4_has_proof,s4_override,s4_quality,s4_runtime_s
+0,3,3,True,3,True,HELPFUL,3,True,HELPFUL,195.38,2,3,True,NOT_APPLICABLE,False,False,HELPFUL,180.16
+1,0,0,True,0,True,HELPFUL,0,True,HELPFUL,224.97,1,1,False,NOT_APPLICABLE,False,False,NEUTRAL_RETAINED_INCORRECT,184.71
+2,2,2,True,2,True,HELPFUL,2,True,HELPFUL,251.75,3,2,True,NOT_APPLICABLE,False,False,HELPFUL,226.81
+3,0,0,True,2,False,HARMFUL,0,True,NEUTRAL_RETAINED_CORRECT,256.1,0,0,True,VALID,True,False,NEUTRAL_RETAINED_CORRECT,238.16
+4,1,0,False,0,False,NEUTRAL_RETAINED_INCORRECT,0,False,NEUTRAL_RETAINED_INCORRECT,238.39,0,0,False,NOT_APPLICABLE,False,False,NEUTRAL_RETAINED_INCORRECT,239.82

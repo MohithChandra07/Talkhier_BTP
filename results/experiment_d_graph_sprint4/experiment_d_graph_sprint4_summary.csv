@@ -1,0 +1,6 @@
+problem_id,condition,ground_truth,a0_choice,final_choice,a0_correct,final_correct,deterministic_status,has_authoritative_proof,proven_choice_index,deterministic_override,evaluators_invoked_count,mean_score,total_retries,revisor_decision,revision_quality,runtime_s
+0,Condition_B_Sprint4_Deterministic,3,2,3,False,True,NOT_APPLICABLE,False,,False,5,8.0,0,REVISED,HELPFUL,180.16
+1,Condition_B_Sprint4_Deterministic,0,1,1,False,False,NOT_APPLICABLE,False,,False,5,6.67,0,RETAINED,NEUTRAL_RETAINED_INCORRECT,184.71
+2,Condition_B_Sprint4_Deterministic,2,3,2,False,True,NOT_APPLICABLE,False,,False,5,5.0,0,REVISED,HELPFUL,226.81
+3,Condition_B_Sprint4_Deterministic,0,0,0,True,True,VALID,True,0,False,5,5.0,0,RETAINED,NEUTRAL_RETAINED_CORRECT,238.16
+4,Condition_B_Sprint4_Deterministic,1,0,0,False,False,NOT_APPLICABLE,False,,False,5,10.0,0,RETAINED,NEUTRAL_RETAINED_INCORRECT,239.82
