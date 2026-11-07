@@ -1,9 +1,19 @@
 # TalkHier BTP: Multi-Agent Hierarchical Formal Reasoning with Deterministic Logical Verification
 
-> **Bachelor Thesis Project (BTP)**  
-> **Author:** Mohith Chandra ([@MohithChandra07](https://github.com/MohithChandra07))  
-> **Repository:** [https://github.com/MohithChandra07/Talkhier_BTP](https://github.com/MohithChandra07/Talkhier_BTP)  
-> **Key Results:** **100.0% Deductive Accuracy** (24/24 on MMLU Propositional Arguments) | **88.6% Overall Accuracy** (31/35) | **Zero Harmful Revisions (0/17)** | **69/69 Unit & Integration Tests Passing**
+<div align="center">
+
+[![Python Version](https://img.shields.io/badge/Python-3.10%20%7C%203.11%20%7C%203.12-blue?logo=python&logoColor=white)](https://www.python.org/)
+[![Test Suite](https://img.shields.io/badge/Tests-69%20passed-brightgreen?logo=pytest&logoColor=white)](./tests/)
+[![License](https://img.shields.io/badge/License-CC%20BY--NC%204.0-lightgrey)](https://creativecommons.org/licenses/by-nc/4.0/)
+[![Target Deductive Accuracy](https://img.shields.io/badge/Verified%20Deductive%20Accuracy-100.0%25%20(24%2F24)-success)](#7-benchmark-results--ablation-study)
+[![Base Paper](https://img.shields.io/badge/Base%20Paper-arXiv%3A2502.11098-red?logo=arxiv&logoColor=white)](https://arxiv.org/abs/2502.11098)
+
+**A Neuro-Symbolic Multi-Agent Framework for Formal Deductive Reasoning**
+
+*Bachelor Thesis Project (BTP) — Mohith Chandra ([@MohithChandra07](https://github.com/MohithChandra07))*  
+*Repository: [https://github.com/MohithChandra07/Talkhier_BTP](https://github.com/MohithChandra07/Talkhier_BTP)*
+
+</div>
 
 ---
 
@@ -25,64 +35,71 @@
 
 ## 1. Project Overview & Research Motivation
 
-Formal logic reasoning—such as assessing deductive argument validity, constructing valid truth assignments, and identifying minimal counterexamples—is a notorious failure mode for autoregressive Large Language Models (LLMs). While multi-agent debate and hierarchical refinement systems improve high-level conversational problem solving, pure LLM ensembles break down on formal deductive tasks due to three inherent limitations:
+Formal logic reasoning—evaluating deductive argument validity, constructing satisfying truth assignments, and identifying minimal counterexamples—is a well-documented challenge for autoregressive Large Language Models (LLMs). While multi-agent debate and hierarchical refinement improve natural language problem-solving, pure LLM ensembles face three recurring issues on formal deductive tasks:
 
-1. **Hallucinatory Logical Closure:** LLMs frequently produce derivations that sound plausible in natural language but violate formal logical validity (e.g., affirming the consequent or denying the antecedent).
-2. **Subjective Consensus Trap:** Multiple LLM evaluators evaluating an erroneous initial generation often exhibit sycophantic agreement, converging on incorrect answers rather than surfacing valid counterexamples.
-3. **Harmful Revisions:** Uncalibrated aggregator and revisor agents frequently flip correct initial answers ($A_0$) into incorrect revisions when persuaded by fallacious natural language reasoning.
+1. **Hallucinatory Logical Closure:** LLMs frequently produce derivations that appear convincing in natural language but violate formal deductive rules (such as affirming the consequent or denying the antecedent).
+2. **Subjective Consensus Traps:** When an initial answer ($A_0$) is flawed, peer LLM evaluators evaluating the reasoning in natural language often exhibit sycophantic agreement, endorsing invalid steps rather than identifying valid counterexamples.
+3. **Harmful Revisions:** Uncalibrated aggregator and revisor agents may accept flawed peer critique, flipping initially correct answers ($A_0$) into incorrect revisions.
 
 ### Research Objective
-The goal of this BTP project is to **bridge neural multi-agent deliberation with deterministic symbolic verification**. By embedding a symbolic propositional logic verification engine (powered by SymPy DPLL SAT solving) into the TalkHier multi-agent graph, we enforce formal deductive correctness, guarantee truthful counterexample generation, and mathematically eliminate harmful revisions on deductive tasks.
+This Bachelor Thesis Project (BTP) investigates the integration of **neural multi-agent deliberation with deterministic symbolic verification**. By integrating a propositional logic verification engine (powered by SymPy DPLL SAT solving) into the TalkHier multi-agent graph, the system validates extracted argument forms, synthesizes explicit countermodels for invalid arguments, and provides structured mathematical evidence to guide the revision process.
+
+Across our 35-problem MMLU Formal Logic benchmark:
+- The system achieved **100.0% accuracy (24/24)** on verified propositional logic arguments (up from 37.5% in initial generation).
+- Overall accuracy reached **88.6% (31/35)** across the stratified benchmark (up from 40.0% in initial generation).
+- Zero harmful revisions were observed across all 17 revisions executed.
 
 ---
 
 ## 2. Original Sony TalkHier Foundation & Attribution
 
-This work builds upon the foundational multi-agent communication framework established in:
+This project builds upon the open-source multi-agent framework introduced by Sony AI:
 
 > **"Talk Structurally, Act Hierarchically: A Collaborative Framework for LLM Multi-Agent Systems"**  
 > *Zhao Wang, Moriyama Sota, Wei-Yao Wang, Briti Gangopadhyay, and Shingo Takamatsu (Sony AI)*  
-> Paper: [arXiv:2502.11098](https://arxiv.org/abs/2502.11098) (February 2025)
+> Paper: [arXiv:2502.11098](https://arxiv.org/abs/2502.11098) (February 2025)  
+> Original Codebase: Sony TalkHier Implementation
 
-### Foundational Concepts Inherited from Sony TalkHier:
-- **Structured Communication Protocol:** Inter-agent messages are partitioned into structured elements:
-  - **Message ($\mathbf{M}_{ij}$):** Core task instruction and response.
-  - **Background ($\mathbf{B}_{ij}$):** Task domain context and shared knowledge.
-  - **Intermediate Output ($\mathbf{I}_{ij}$):** Step-by-step reasoning chain and partial derivations.
-- **Hierarchical Supervision:** Separation of responsibilities between **Supervisor Agents** (routing and orchestration), **Member Agents** (task execution), and **Evaluator Teams** (feedback and quality checks).
-- **Two-Pass Refinement:** Initial generation ($A_0$) evaluated by a specialized evaluator team, aggregated, and revised by a designated Revisor agent.
+### Inherited Foundations from Sony TalkHier:
+- **Structured Communication Protocol:** Structured message exchanges between agents:
+  - **Message ($\mathbf{M}_{ij}$):** Task instruction and primary agent response.
+  - **Background ($\mathbf{B}_{ij}$):** Domain context and shared problem constraints.
+  - **Intermediate Output ($\mathbf{I}_{ij}$):** Step-by-step reasoning steps and partial derivations.
+- **Hierarchical Supervision Concept:** Division of labor between **Supervisor Agents** (routing), **Member Agents** (task execution), and **Evaluator Teams** (feedback).
+- **Two-Pass Refinement Flow:** An initial solver generates answer $A_0$, which is subsequently critiqued by evaluators, summarized by an Aggregator, and finalized by a Revisor.
 
-We express our gratitude to Sony AI and the original authors for open-sourcing the initial codebase and communication abstraction.
+### Independent BTP Modifications:
+While inheriting TalkHier's structured communication primitives, all architectural mechanisms described below—including the deterministic graph state machine, selective evaluator dispatch, SymPy SAT verification engine, evidence injection pipelines, and revisor hard override safeguards—were independently designed, implemented, and empirically evaluated in this project.
 
 ---
 
 ## 3. Three Identified Loopholes in Original TalkHier
 
-Through extensive empirical auditing (Sprints 1 and 2, including **Experiment D** across MMLU Formal Logic), we discovered three fundamental architectural loopholes in the original TalkHier design:
+Through systematic empirical auditing during Sprints 1 and 2 (including **Experiment D** on MMLU Formal Logic), three architectural limitations were identified in the original TalkHier design:
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
 │                       THREE IDENTIFIED LOOPHOLES                            │
 ├─────────────────────────────────────────────────────────────────────────────┤
-│ 1. Evaluator Bypass        Supervisor could skip evaluators at will;        │
-│    (Ad-hoc Routing)        up to 60% of test questions had 0 evaluators run.│
+│ 1. Evaluator Bypass        Supervisor LLM routed ad-hoc; evaluators were    │
+│    (Ad-hoc Routing)        skipped on >60% of formal logic questions.       │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │ 2. Uncalibrated Feedback   Evaluators relied on subjective LLM prompts      │
-│    (Subjective Heuristics) without mathematical ground-truth or rubrics.    │
+│    (Subjective Heuristics) without formal proofs, leading to false consensus│
 ├─────────────────────────────────────────────────────────────────────────────┤
-│ 3. Sycophantic Revisions   Revisors accepted false critiques, causing       │
-│    (Harmful Drift)         harmful revisions (flipping correct A0 to wrong).│
+│ 3. Harmful Revisions       Revisors lacked verification safeguards,         │
+│    (Sycophantic Drift)     flipping correct initial answers to incorrect.   │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 
 ### Loophole 1: Evaluator Bypass (Ad-hoc Routing)
-In the original framework, the supervisor LLM decided whether to call evaluators dynamically. Under standard prompts, the supervisor frequently terminated execution directly after the initial agent output, bypassing the evaluator team on over 60% of formal logic questions. The multi-agent refinement system existed in code but was rarely invoked in practice.
+In the original framework, the supervisor LLM decided dynamically whether to invoke evaluators. Under standard prompting, the supervisor frequently terminated execution immediately after the initial agent output, skipping evaluation on over 60% of logic questions. Consequently, the multi-agent refinement system was rarely exercised.
 
 ### Loophole 2: Subjective and Uncalibrated Evaluation
-When evaluators were triggered, they evaluated arguments purely using standard natural language prompting. They lacked structured rubrics, formal taxonomy tags, and quantitative thresholds. When confronted with subtle fallacies (such as confusing a conditional $P \to Q$ with $Q \to P$), neural evaluators frequently agreed with incorrect premises, producing false consensus.
+When evaluators were invoked, they assessed reasoning solely via natural language prompts without quantitative rubrics or symbolic checks. When faced with subtle logical fallacies (such as invalid conditional reversals), neural evaluators frequently agreed with incorrect steps, creating a false consensus.
 
 ### Loophole 3: Sycophantic and Harmful Revisions
-The original Aggregator and Revisor agents lacked verification safeguards. When an evaluator provided flawed feedback on a correct initial response ($A_0$), the Revisor blindly accepted the critique, causing **harmful revisions** (accuracy dropped from 80% to 60% in early benchmarks due to erroneous answer flipping). Furthermore, when $A_0$ was incorrect, the Revisor often failed to override it without mathematical proof.
+The original Aggregator and Revisor agents had no verification safeguards. When an evaluator provided flawed feedback on an initially correct response ($A_0$), the Revisor accepted the critique, resulting in **harmful revisions** (in early benchmarks, correct answers were flipped to incorrect choices). Conversely, when $A_0$ was incorrect, the Revisor often failed to overturn it without authoritative evidence.
 
 ---
 
@@ -91,34 +108,37 @@ The original Aggregator and Revisor agents lacked verification safeguards. When 
 To systematically resolve these three loopholes, the project proceeded through iterative engineering and empirical research sprints:
 
 ### Sprint 1 & 2: Baseline Replication, Schema Stabilization & Audit
-- Resolved schema mismatches, JSON formatting errors, and agent timeout exceptions.
-- Executed **Experiment D**: Formal audit of evaluator supervision confirming the bypass rate and sycophancy vulnerabilities.
+- Resolved schema mismatches, JSON formatting errors, and agent timeout exceptions in the upstream repository.
+- Implemented **Experiment D**: A formal audit of evaluator supervision confirming that ad-hoc supervisor routing bypassed evaluators in the majority of test runs.
 
 ### Sprint 3: Graph-Level Mandatory Evaluation Pipeline
-- **Architectural Enactment (`graph_dispatch.py`):** Replaced ad-hoc supervisor routing with a deterministic LangGraph state machine.
-- **Mandatory Evaluator Prep:** Enforced taxonomy classification and required at least two domain evaluators (Propositional, Soundness, Fallacy) to run on every problem.
-- **Result:** Evaluator invocation rate reached 100%, and bypass was completely eliminated.
+- **Deterministic State Machine (`graph_dispatch.py`):** Replaced ad-hoc LLM supervisor routing with a deterministic LangGraph workflow.
+- **Mandatory Evaluator Prep:** Enforced taxonomy classification and required domain evaluators (Propositional, Soundness, Fallacy) to execute on every question before reaching the Revisor.
+- **Outcome:** Evaluator invocation rate reached 100%, completely eliminating the evaluator bypass loophole.
 
-### Sprint 3 Optimized (`graph_dispatch_opt.py`): Selective Dispatch & Hardening
-- Replaced unconditional 4-evaluator brute-force dispatch with selective dispatch based on the question taxonomy, reducing token overhead by 35% and runtime by 10%.
-- Enforced calibrated confidence rubrics and Revisor safeguards, reducing harmful revisions to 0.
+### Sprint 3 Optimized: Selective Dispatch & Hardening (`graph_dispatch_opt.py`)
+- Replaced unconditional 4-evaluator brute-force dispatch with selective dispatch driven by question taxonomy.
+- Reduced redundant evaluator invocations from 20 to 13 calls across the 5-problem pilot (a **35% reduction in evaluator calls**).
+- Reduced total 5-problem runtime from 1,919.7s to 1,166.6s (**39.2% faster than baseline graph dispatch**).
+- Introduced structured scoring rubrics and confidence thresholds, eliminating harmful revisions on the pilot benchmark.
 
-### Sprint 4: Deterministic Propositional Logic Engine & Hard Override Safeguard
+### Sprint 4: Deterministic Propositional Logic Engine & Revisor Safeguards
 - **Symbolic Verification Engine (`src/multiagent/logic_verifier.py`):**
-  - Integrated SymPy's SAT/DPLL solver.
+  - Integrated SymPy's DPLL SAT solver.
   - Automatically parses premises $P_1, P_2, \dots, P_n$ and conclusion $C$.
-  - Tests formal deductive validity: $\bigwedge_{i=1}^n P_i \models C \iff \text{UNSAT}(\bigwedge_{i=1}^n P_i \land \neg C)$.
-  - If invalid, synthesizes an authoritative truth-value countermodel falsifying the argument.
-- **Evidence Injection & Safeguards (`src/multiagent/graph_dispatch_sprint4.py`):**
-  - Injects structured deterministic verification evidence into Evaluators, Aggregator, and Revisor.
-  - **Deterministic Hard Override:** When formula extraction and answer-choice mapping are fully validated, the Revisor is bound by symbolic proof and cannot be swayed by neural hallucinations.
-  - LLM fallback is preserved for natural language questions and unsupported first-order predicate logic.
+  - Assesses deductive validity via satisfiability refutation:
+    $$\bigwedge_{i=1}^n P_i \models C \iff \text{UNSAT}\left(\bigwedge_{i=1}^n P_i \land \neg C\right)$$
+  - For invalid arguments, synthesizes a concrete truth-value countermodel falsifying the derivation.
+- **Evidence Injection & Hard Override Safeguard (`src/multiagent/graph_dispatch_sprint4.py`):**
+  - Injects structured deterministic verification evidence into Evaluator, Aggregator, and Revisor prompts.
+  - **Deterministic Hard Override:** When formula extraction and answer-choice mapping are fully validated, the Revisor is programmatically safeguarded against adopting contradictory neural feedback.
+  - Natural language questions and unsupported first-order predicate structures cleanly fall back to the calibrated LLM evaluation path.
 
 ---
 
 ## 5. System Architecture
 
-The following diagram illustrates the complete neuro-symbolic workflow implemented in Sprint 4:
+The following diagram illustrates the neuro-symbolic workflow implemented in Sprint 4:
 
 ```mermaid
 flowchart TD
@@ -127,7 +147,7 @@ flowchart TD
         A0_Agent --> A0["Initial Answer (A0) & Derivation"]
     end
 
-    subgraph Dispatch_Stage ["2. Taxonomy & Verification Stage"]
+    subgraph Dispatch_Stage ["2. Taxonomy & Routing"]
         A0 --> Prep["Evaluator Prep Node (Taxonomy & Problem Parsing)"]
         Prep --> Symbolic_Branch{"Is Propositional Argument?"}
     end
@@ -145,7 +165,7 @@ flowchart TD
         Evidence --> Eval_Fallacy["Fallacy Evaluator (Evidence Injected)"]
     end
 
-    subgraph Aggregation_Stage ["5. Synthesis & Hard Override Revisor"]
+    subgraph Aggregation_Stage ["5. Synthesis & Revisor Safeguard"]
         Eval_Prop --> Aggregator["Aggregator Node (Synthesizes Neural Scores + Symbolic Proof)"]
         Eval_Sound --> Aggregator
         Eval_Fallacy --> Aggregator
@@ -153,7 +173,7 @@ flowchart TD
         Aggregator --> Revisor{"Revisor Safeguard Node"}
         Evidence -. "Authoritative Proof" .-> Revisor
         Revisor -- "Override Triggered (Validated SAT Proof)" --> Final_Override["Deterministic Override Answer"]
-        Revisor -- "Evidence Unavailable / Fallback" --> Final_Revision["Constrained LLM Revision / Retain A0"]
+        Revisor -- "Fallback / Evidence Unavailable" --> Final_Revision["Calibrated LLM Revision / Retain A0"]
     end
 
     subgraph Output_Stage ["6. Output"]
@@ -172,7 +192,7 @@ flowchart TD
 
 ```
 Talkhier_BTP/
-├── Progress reports/                  # Detailed milestone progress reports (Sprints 1 - 4.3)
+├── Progress reports/                  # Sprint milestone reports (Sprints 1 through 4.3)
 │   ├── 00_BTP_EXECUTIVE_SUMMARY_AND_SPRINT_CHRONOLOGY.md
 │   ├── 01_Sprint_1_Baseline_Replication_and_Stabilization.md
 │   ├── 02_Sprint_2_Experiment_D_Evaluator_Supervision_Audit.md
@@ -181,22 +201,22 @@ Talkhier_BTP/
 │   ├── 05_Sprint_4_1_Deterministic_Verification_Audit.md
 │   ├── 06_Sprint_4_2_SymPy_SAT_Integration_Pilot.md
 │   └── 07_Sprint_4_3_Comprehensive_Benchmark_and_Ablation_Evaluation.md
-├── presentations/                     # Mid-term and sprint slide decks
+├── presentations/                     # Slide decks and presentations
 │   ├── TalkHier_BTP_Week1_Week2_Presentation.pptx
 │   └── presentation.html              # Interactive HTML presentation deck
 ├── results/
 │   ├── experiment_d/                  # Sprint 2 evaluator audit traces and CSVs
 │   ├── experiment_d_graph/            # Sprint 3 graph-dispatch traces and CSVs
 │   ├── experiment_d_graph_opt/        # Sprint 3 optimized selective-dispatch traces
-│   └── experiment_sprint4_3/          # Sprint 4.3 large-scale benchmark & ablations
-│       ├── raw_traces/                # 63 full execution trace JSON files
+│   └── experiment_sprint4_3/          # Sprint 4.3 35-problem benchmark & ablations
+│       ├── raw_traces/                # 63 execution trace JSON files
 │       │   ├── sprint3_opt/           # Baseline control traces (18 problems)
 │       │   ├── sprint4_full/          # Full Sprint 4 traces (35 problems)
 │       │   ├── sprint4_ablation_a/    # Ablation A traces (5 problems)
 │       │   └── sprint4_ablation_b/    # Ablation B traces (5 problems)
 │       ├── benchmark_comparison.csv   # Problem-by-problem comparative results
 │       ├── ablation_comparison.csv    # Ablation condition results
-│       └── error_analysis.csv         # Root-cause analysis of all 4 non-target errors
+│       └── error_analysis.csv         # Classification of all incorrect outcomes
 ├── src/
 │   ├── multiagent/
 │   │   ├── logic_verifier.py          # SymPy DPLL SAT verification & countermodel engine
@@ -204,11 +224,11 @@ Talkhier_BTP/
 │   │   ├── graph_dispatch_opt.py      # Sprint 3 Optimized selective dispatch baseline
 │   │   ├── graph_dispatch.py          # Sprint 3 Mandatory graph dispatch baseline
 │   │   ├── evaluator_dispatch.py      # Evaluator dispatch and scoring logic
-│   │   └── agent_team.py              # Multi-agent roles (Prep, Evaluators, Aggregator, Revisor)
-│   ├── experiment_sprint4_3.py        # Large-scale 35-problem benchmark runner
+│   │   └── agent_team.py              # Multi-agent role definitions
+│   ├── experiment_sprint4_3.py        # 35-problem benchmark runner
 │   ├── generate_sprint4_3_report.py   # Statistical report and CSV aggregation script
-│   └── print_markdown_table.py        # Clean markdown table exporter
-├── tests/                             # Comprehensive test suite (69 tests)
+│   └── print_markdown_table.py        # Markdown table export utility
+├── tests/                             # Unit & integration test suite (69 tests)
 │   ├── test_logic_verifier.py         # 17 tests: SymPy SAT solver, countermodels, CNF conversion
 │   ├── test_graph_dispatch_sprint4.py # 15 tests: Sprint 4 graph pipeline & hard override
 │   ├── test_graph_dispatch_opt.py     # 8 tests: Sprint 3 opt selective routing & caching
@@ -227,49 +247,62 @@ Talkhier_BTP/
 
 ## 7. Benchmark Results & Ablation Study
 
-In **Sprint 4.3**, the entire framework was benchmarked across **35 stratified MMLU Formal Logic problems** (27 target propositional logic questions and 8 stratified non-propositional control problems) comparing:
-- **Baseline $A_0$:** Initial single-agent generation.
-- **Sprint 3 Opt:** Graph-level neural multi-agent selective dispatch.
-- **Sprint 4 Full:** Neuro-symbolic multi-agent with deterministic SAT verification and hard override.
+In **Sprint 4.3**, the framework was evaluated across **35 stratified MMLU Formal Logic problems** (27 target propositional logic problems and 8 stratified non-propositional control problems). 
 
-### Benchmark Results Table
+### 7.1 Aggregate Benchmark Performance (Sprint 4 Full vs. Baseline $A_0$)
 
-| Domain / Stratum | Sample ($N$) | Initial $A_0$ Acc. | Sprint 3 Opt Acc. | Sprint 4 Full Acc. | Net Gain vs Baseline | Harmful Revisions |
-| :--- | :---: | :---: | :---: | :---: | :---: | :---: |
-| **Verified Propositional Logic (Target)** | **24** | 29.2% (7/24) | 60.0% (6/10)* | **100.0% (24/24)** | **+70.8%** | **0 (0.0%)** |
-| Target Domain (All Propositional) | 27 | 37.0% (10/27) | 64.3% (9/14)* | **88.9% (24/27)** | **+51.9%** | **0 (0.0%)** |
-| Non-Propositional Controls | 8 | 87.5% (7/8) | 75.0% (3/4)* | **87.5% (7/8)** | +0.0% | **0 (0.0%)** |
-| **Complete 35-Problem Benchmark** | **35** | 48.6% (17/35) | 66.7% (12/18)* | **88.6% (31/35)** | **+40.0%** | **0 (0.0%)** |
+All metrics below are verified against `benchmark_comparison.csv` and `SPRINT_4_3_EVALUATION_REPORT.md`:
 
-*\*Note: Sprint 3 Opt baseline was evaluated head-to-head on an 18-problem representative subset.*
+| Benchmark Partition | Count ($N$) | Initial $A_0$ Accuracy | Sprint 4 Full Final Accuracy | Helpful Revisions | Harmful Revisions | Neutral Retentions | Verifier Proof Precision |
+| :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+| **Target: Pure Propositional Logic** | 24 | 37.5% (9/24) | **100.0% (24/24)** | **15** | **0** | 9 | **100.0% (24/24)** |
+| **Target: Predicate Fallback** | 3 | 33.3% (1/3) | **33.3% (1/3)** | 0 | 0 | 3 | N/A (`NOT_APPLICABLE`) |
+| **Target Domain Total** | 27 | 37.0% (10/27) | **92.6% (25/27)** | **15** | **0** | 12 | 100.0% (24/24) |
+| **Control Domain (Stratified)** | 8 | 50.0% (4/8) | **75.0% (6/8)** | **2** | **0** | 6 | N/A (`NOT_APPLICABLE`) |
+| **Full 35-Problem Benchmark** | **35** | **40.0% (14/35)** | **88.6% (31/35)** | **17** | **0** | **18** | **100.0% (24/24)** |
 
-### Revision Quality Analysis
-- **Helpful Revisions:** **17** (where initial $A_0$ was incorrect, and the system revised it to the correct ground truth).
-- **Harmful Revisions:** **0** (the system **never** flipped a correct $A_0$ to an incorrect answer).
-- **Neutral Revisions:** **18** (retained the correct initial answer or unhandled edge cases).
+### 7.2 Head-to-Head Comparison: Sprint 3 Opt vs. Sprint 4 Full (18-Problem Slices)
 
-### Ablation Study
-To isolate the exact causal mechanisms, an ablation study was conducted across challenging problems `[6, 20, 23, 31, 35]` where initial generation $A_0$ had failed:
+To evaluate the specific impact of the deterministic verifier against our pure LLM multi-agent baseline, Sprint 3 Opt was evaluated across an 18-problem subset under identical prompt and model configurations:
+
+| Partition | Evaluated Problems ($N$) | Sprint 3 Opt Accuracy | Sprint 4 Full Accuracy | Descriptive Difference |
+| :--- | :---: | :---: | :---: | :---: |
+| **Target Propositional** | 10 | 60.0% (6/10) | **100.0% (10/10)** | **+40.0% gain** |
+| **Control Non-Propositional** | 8 | **87.5% (7/8)** | 75.0% (6/8) | -12.5% (LLM variance) |
+| **Total Head-to-Head Subset** | 18 | 72.2% (13/18) | **88.9% (16/18)** | **+16.7% gain** |
+
+> **Statistical Note:** A paired McNemar test on the 18 shared problems yields $b = 4$ (Sprint 4 correct, Opt incorrect) and $c = 1$ (Opt correct, Sprint 4 incorrect), giving $\chi^2 = 0.80$ ($p > 0.05$ with Edwards continuity correction). While the observed +40.0% target-domain improvement is descriptively substantial, formal statistical significance is constrained by the paired sample size ($N=18$).
+
+### 7.3 Ablation Study
+
+An ablation study was conducted across 5 challenging problems (`[6, 20, 23, 31, 35]`) where the initial answer generator $A_0$ had failed:
 
 | Experimental Condition | Evaluator Evidence | Revisor Hard Override | Accuracy (5/5) | Helpful Revisions | Harmful Revisions |
 | :--- | :---: | :---: | :---: | :---: | :---: |
-| **Sprint 3 Opt (Control)** | ❌ Disabled | ❌ Disabled | 60.0% (3/5) | 2 | 0 |
+| **Sprint 3 Opt (Pure LLM Control)** | ❌ Disabled | ❌ Disabled | 60.0% (3/5) | 2 | 0 |
 | **Full Sprint 4 (Neuro-Symbolic)** | ✅ Enabled | ✅ Enabled | **100.0% (5/5)** | **5** | **0** |
-| **Ablation A (Hard Override Only)** | ❌ Disabled | ✅ Enabled | **100.0% (5/5)** | **5** | **0** |
+| **Ablation A (Override Only, No Eval Evidence)** | ❌ Disabled | ✅ Enabled | **100.0% (5/5)** | **5** | **0** |
 | **Ablation B (Evidence Only, Soft Revisor)** | ✅ Enabled | ❌ Disabled | **100.0% (5/5)** | **5** | **0** |
 
-#### Ablation Insights:
-1. **Voluntary Compliance (Ablation B):** When structured deterministic evidence was injected into prompts without a hard override, the LLM Revisor voluntarily complied with the SAT solver's proof in 100% of tested cases.
-2. **Deterministic Safeguard (Ablation A):** Hard override alone is sufficient to enforce correctness even if neural evaluators receive no evidence, serving as an absolute safety barrier against hallucination.
+#### Key Ablation Findings:
+1. **Voluntary Compliance (Ablation B):** When structured deterministic evidence was injected into Evaluator and Revisor prompts without an authoritative override, the Revisor voluntarily adopted the verified SAT proof in 100% of tested cases.
+2. **Hard Override as a Safeguard (Ablation A):** Hard override alone ensured 100% accuracy on verified extractions even when neural evaluators received no evidence, providing a reliable programmatic guardrail against hallucinated revisions.
+
+### 7.4 Error Analysis
+
+The 4 incorrect outcomes observed in Sprint 4 Full were analyzed to identify their root causes:
+- **Control Problems 1 & 4:** Non-propositional questions where deterministic verification correctly returned `NOT_APPLICABLE`. The pure LLM evaluators and Revisor retained flawed initial choices due to natural language ambiguity.
+- **Target Problems 49 & 101:** Contained first-order relational predicates and quantifiers outside the propositional parser scope, triggering clean fallback to LLM evaluation, which retained incorrect answers.
+- **Zero Harmful Revisions:** In none of the 35 cases did the system flip an initially correct $A_0$ into an incorrect answer.
 
 ---
 
 ## 8. Installation & Execution Instructions
 
 ### Prerequisites
-- macOS or Linux
+- macOS (Apple Silicon / Intel) or Linux (Ubuntu 20.04+)
 - Python 3.10, 3.11, or 3.12
-- Local or remote LLM endpoint (e.g. Ollama running `qwen2.5:7b` or `qwen3`, or an OpenAI-compatible API)
+- Local LLM via [Ollama](https://ollama.ai/) (configured with `qwen2.5:7b` or `qwen3`) or an OpenAI-compatible API endpoint
 
 ### 1. Clone the Repository
 ```bash
@@ -292,7 +325,7 @@ pip install -r requirements.txt
 Configure `config/config_llm.ini` or set environment variables:
 ```bash
 export OPENAI_API_KEY="your-api-key"
-export OPENAI_ENDPOINT="http://localhost:11434/v1"  # For local Ollama
+export OPENAI_ENDPOINT="http://localhost:11434/v1"  # For local Ollama instances
 ```
 
 ### 5. Run the Test Suite
@@ -300,47 +333,53 @@ Verify that all 69 unit and integration tests pass:
 ```bash
 pytest tests/ -v
 ```
+*Expected output: `69 passed in ~1.2s`.*
 
 ---
 
 ## 9. Reproduction Instructions
 
-All benchmark experiments and ablation studies are fully reproducible using the provided CLI scripts:
+All benchmark comparisons, ablations, and error analysis CSVs can be reproduced using the repository's execution scripts:
 
-### Run Sprint 4 Full Large-Scale Benchmark (35 Problems)
+### Run Sprint 4 Full Benchmark (35 Problems)
 ```bash
 python3 src/experiment_sprint4_3.py --condition sprint4_full
 ```
 
-### Run Sprint 3 Optimized Baseline Comparison
+### Run Sprint 3 Optimized Baseline (18 Problems)
 ```bash
 python3 src/experiment_sprint4_3.py --condition sprint3_opt
 ```
 
 ### Run Ablation Studies
 ```bash
-# Ablation A: Verifier + Hard Override (No Evaluator Evidence)
+# Ablation A: Verifier + Hard Override (Evaluator Evidence Disabled)
 python3 src/experiment_sprint4_3.py --condition sprint4_ablation_a
 
-# Ablation B: Verifier + Evaluator Evidence (Soft Revisor, No Hard Override)
+# Ablation B: Verifier + Evaluator Evidence (Hard Override Disabled)
 python3 src/experiment_sprint4_3.py --condition sprint4_ablation_b
 ```
 
-### Generate Comparative CSVs & Statistics
+### Regenerate Consolidated Reports and Comparison CSVs
 ```bash
 python3 src/generate_sprint4_3_report.py
 ```
-This updates `benchmark_comparison.csv`, `ablation_comparison.csv`, and `error_analysis.csv` inside `results/experiment_sprint4_3/`.
+This processes execution traces from `results/experiment_sprint4_3/raw_traces/` and outputs:
+- `results/experiment_sprint4_3/benchmark_comparison.csv`
+- `results/experiment_sprint4_3/ablation_comparison.csv`
+- `results/experiment_sprint4_3/error_analysis.csv`
+
+> **Note on Reproduction:** LLM generation outputs depend on the exact model version, quantization, temperature (set to 0 for evaluation), and local inference hardware. Raw execution traces for all 63 runs are preserved in `results/experiment_sprint4_3/raw_traces/` for independent verification.
 
 ---
 
 ## 10. Limitations & Future Scope
 
-While Sprint 4 achieves **100% deductive accuracy** on propositional logic problems, our error analysis identified clear boundaries and future research opportunities:
+While the deterministic verification engine achieved **100% accuracy on verified propositional arguments**, the system has well-defined operational boundaries:
 
-1. **First-Order Predicate Logic:** Arguments involving quantifiers ($\forall, \exists$) and multi-place relational predicates (such as transitivity relations $T(d, c) \land T(c, b) \implies T(d, b)$) are currently routed to LLM fallback. Extending the symbolic engine with an SMT solver (such as **Z3**) or first-order resolution prover (**Prover9**) is the primary planned extension.
-2. **Informal and Natural Language Fallacies:** Control problems testing rhetorical fallacies (e.g. *ad hominem*, appeal to emotion, inductive generalization) lack formal truth-table representations and must continue to rely on calibrated neural evaluators.
-3. **Complex Premise Extraction:** In rare natural language edge cases with heavily nested syntax, premise extraction regex/heuristics may return `PARSE_FAILURE`. Fine-tuning a lightweight semantic parsing model for formal logic extraction represents a valuable next step.
+1. **First-Order Predicate Logic:** The current SAT engine operates on propositional logic. Problems involving quantifiers ($\forall, \exists$) and multi-place relational predicates (such as transitivity relations $T(a,b) \land T(b,c) \implies T(a,c)$) are identified during parsing and routed to the LLM fallback path. Extending the symbolic engine with an SMT solver (such as **Z3**) or a first-order resolution prover (**Prover9**) is the primary architectural extension.
+2. **Informal and Non-Propositional Logic:** Rhetorical fallacies (e.g., *ad hominem*, appeal to emotion) and inductive arguments cannot be expressed as truth-functional formulas and will continue to rely on calibrated neural evaluators.
+3. **Complex Premise Extraction:** In arguments with heavily nested or ambiguous natural language phrasing, premise extraction heuristics may yield `PARSE_FAILURE`. Fine-tuning a lightweight semantic parser for formal premise-conclusion extraction would further expand verification coverage.
 
 ---
 
@@ -352,8 +391,24 @@ While Sprint 4 achieves **100% deductive accuracy** on propositional logic probl
 3. **SymPy:** Aaron Meurer et al. *"SymPy: symbolic computing in Python."* PeerJ Computer Science, 2017.
 4. **LangGraph:** Harrison Chase et al. *"LangGraph: Building Language Agents as Graphs."* LangChain Inc., 2024.
 
+### Original Licence Information
+The foundational TalkHier code is licensed under the [Creative Commons Attribution-NonCommercial 4.0 International License (CC BY-NC 4.0)](https://creativecommons.org/licenses/by-nc/4.0/).
+
+### Citation
+```bibtex
+@misc{wang2025talkhier,
+      title={Talk Structurally, Act Hierarchically: A Collaborative Framework for LLM Multi-Agent Systems}, 
+      author={Zhao Wang and Sota Moriyama and Wei-Yao Wang and Briti Gangopadhyay and Shingo Takamatsu},
+      year={2025},
+      eprint={2502.11098},
+      archivePrefix={arXiv},
+      primaryClass={cs.AI},
+      url={https://arxiv.org/abs/2502.11098}, 
+}
+```
+
 ### Acknowledgements
-This project was conducted as part of the Bachelor Thesis Project (BTP). We acknowledge the open-source releases of Sony AI's TalkHier framework, SymPy, LangChain/LangGraph, and Ollama, which made rigorous neuro-symbolic research possible.
+This research was conducted as part of the Bachelor Thesis Project (BTP). We thank the authors of Sony AI's TalkHier, SymPy, LangChain/LangGraph, and Ollama for providing open-source tools that support reproducible neuro-symbolic research.
 
 ---
 
@@ -362,7 +417,7 @@ This project was conducted as part of the Bachelor Thesis Project (BTP). We ackn
 | Document | Description | Path |
 | :--- | :--- | :--- |
 | **Executive Summary & Sprint Chronology** | Master synthesis across Sprints 1 to 4.3 | [`Progress reports/00_BTP_EXECUTIVE_SUMMARY_AND_SPRINT_CHRONOLOGY.md`](./Progress%20reports/00_BTP_EXECUTIVE_SUMMARY_AND_SPRINT_CHRONOLOGY.md) |
-| **Sprint 4.3 Scientific Evaluation Report** | 35-problem benchmark, statistical tests, error analysis | [`SPRINT_4_3_EVALUATION_REPORT.md`](./SPRINT_4_3_EVALUATION_REPORT.md) |
+| **Sprint 4.3 Scientific Evaluation Report** | 35-problem benchmark, statistical analysis, error analysis | [`SPRINT_4_3_EVALUATION_REPORT.md`](./SPRINT_4_3_EVALUATION_REPORT.md) |
 | **Sprint 1 Report** | Stabilization, schema fixes, baseline setup | [`Progress reports/01_Sprint_1_Baseline_Replication_and_Stabilization.md`](./Progress%20reports/01_Sprint_1_Baseline_Replication_and_Stabilization.md) |
 | **Sprint 2 Report** | Evaluator supervision audit & Experiment D | [`Progress reports/02_Sprint_2_Experiment_D_Evaluator_Supervision_Audit.md`](./Progress%20reports/02_Sprint_2_Experiment_D_Evaluator_Supervision_Audit.md) |
 | **Sprint 3 Report** | Mandatory graph-level evaluation pipeline | [`Progress reports/03_Sprint_3_Graph_Level_Forced_Evaluator_Integration.md`](./Progress%20reports/03_Sprint_3_Graph_Level_Forced_Evaluator_Integration.md) |
