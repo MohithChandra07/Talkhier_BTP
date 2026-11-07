@@ -4,7 +4,9 @@ import os
 from langchain_core.messages import AIMessage, ToolMessage
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../src")))
+# pyrefly: ignore[missing-import]
 from multiagent.tools import TruthTableGenerator, CounterexampleVerifier, OutputTool
+# pyrefly: ignore[missing-import]
 from multiagent.react_agent import create_react_agent
 
 
@@ -51,6 +53,7 @@ class TestTools(unittest.TestCase):
         self.assertIn("Thoughts recorded", res)
 
     def test_should_continue_duplicate_detection(self):
+        # pyrefly: ignore[missing-import]
         from multiagent.react_agent import create_react_agent
         from unittest.mock import MagicMock
         from pydantic import BaseModel, Field

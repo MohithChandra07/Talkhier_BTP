@@ -4,6 +4,7 @@ import os
 from langchain_core.messages import AIMessage, HumanMessage
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../src")))
+# pyrefly: ignore[missing-import]
 from multiagent.agent_team import AgentTeam, ReactAgent
 
 

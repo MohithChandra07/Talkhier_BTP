@@ -6,6 +6,7 @@ from langchain_core.messages import AIMessage, HumanMessage
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../src")))
 
+# pyrefly: ignore[missing-import]
 from multiagent.evaluator_dispatch import (
     EvaluationAggregator,
     AggregatedEvaluation,
@@ -15,6 +16,7 @@ from multiagent.evaluator_dispatch import (
     RevisorHandler,
     EVALUATOR_NAMES_FORMAL_LOGIC,
 )
+# pyrefly: ignore[missing-import]
 from multiagent.agent_team import extract_evaluator_score
 
 
