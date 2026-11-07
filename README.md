@@ -1,4 +1,40 @@
-# Talk Structurally, Act Hierarchically: A Collaborative Framework for LLM Multi-Agent Systems
+# TalkHier BTP: Multi-Agent Hierarchical Formal Reasoning with Deterministic Logical Verification
+
+> **BTP Project by Mohith Chandra**  
+> **Repository:** [https://github.com/MohithChandra07/Talkhier_BTP](https://github.com/MohithChandra07/Talkhier_BTP)  
+> **Key Milestone:** **100.0% Deductive Logic Accuracy** (24/24 on MMLU Propositional Arguments) | **Zero Harmful Revisions** | **69/69 Unit Tests Passing**
+
+---
+
+## 🚀 BTP Research Progress & Documentation
+
+All project documentation, benchmarks, evaluation traces, and presentations are organized below:
+
+- **[Master Progress Report & Sprint Chronology](./Progress%20reports/00_BTP_EXECUTIVE_SUMMARY_AND_SPRINT_CHRONOLOGY.md)**: Full trajectory across Sprints 1 through 4.3.
+- **[Sprint 4.3 Comprehensive Evaluation Report](./SPRINT_4_3_EVALUATION_REPORT.md)**: 35-problem benchmark, 4-way ablation study, McNemar paired testing, and error analysis.
+- **[Sprint-by-Sprint Progress Reports Folder](./Progress%20reports/)**: Individual reports for every sprint milestone:
+  1. [`01_Sprint_1_Baseline_Replication_and_Stabilization.md`](./Progress%20reports/01_Sprint_1_Baseline_Replication_and_Stabilization.md)
+  2. [`02_Sprint_2_Experiment_D_Evaluator_Supervision_Audit.md`](./Progress%20reports/02_Sprint_2_Experiment_D_Evaluator_Supervision_Audit.md)
+  3. [`03_Sprint_3_Graph_Level_Forced_Evaluator_Integration.md`](./Progress%20reports/03_Sprint_3_Graph_Level_Forced_Evaluator_Integration.md)
+  4. [`04_Sprint_3_Evaluator_Optimization_and_Hardening.md`](./Progress%20reports/04_Sprint_3_Evaluator_Optimization_and_Hardening.md)
+  5. [`05_Sprint_4_1_Deterministic_Verification_Audit.md`](./Progress%20reports/05_Sprint_4_1_Deterministic_Verification_Audit.md)
+  6. [`06_Sprint_4_2_SymPy_SAT_Integration_Pilot.md`](./Progress%20reports/06_Sprint_4_2_SymPy_SAT_Integration_Pilot.md)
+  7. [`07_Sprint_4_3_Comprehensive_Benchmark_and_Ablation_Evaluation.md`](./Progress%20reports/07_Sprint_4_3_Comprehensive_Benchmark_and_Ablation_Evaluation.md)
+- **[Presentations](./presentations/)**:
+  - [`TalkHier_BTP_Week1_Week2_Presentation.pptx`](./presentations/TalkHier_BTP_Week1_Week2_Presentation.pptx) (Slide Deck)
+  - [`presentation.html`](./presentations/presentation.html) (Interactive HTML Slides)
+- **[Benchmark & Trace Data](./results/experiment_sprint4_3/)**:
+  - `benchmark_comparison.csv`, `ablation_comparison.csv`, `error_analysis.csv`, and all 63 raw execution traces.
+
+### Running the Test Suite
+```bash
+# Run full unit & integration test suite (69 tests)
+pytest tests/
+```
+
+---
+
+# Original Paper Implementation: Talk Structurally, Act Hierarchically
 
 ## Overview
 This repository contains the official implementation of the multi-agent LLM system described in the paper [**“Talk Structurally, Act Hierarchically: A Collaborative Framework for LLM Multi-Agent Systems”**](https://arxiv.org/abs/2502.11098) by Zhao Wang, Moriyama Sota, Wei-Yao Wang, Briti Gangopadhyay and Shingo Takamatsu. For simplicity, we refer to our model as ***TalkHier***. ***TalkHier*** models hierarchical agent communication to efficiently solve complex tasks by leveraging structured conversations. It introduces a novel framework that establishes a structured communication protocol for context-rich exchanges and a hierarchical refinement system to address issues such as incorrect outputs, falsehoods, and biases.
