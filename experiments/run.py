@@ -40,6 +40,8 @@ from src.multiagent.evaluator_dispatch import EVALUATOR_NAMES_FORMAL_LOGIC
 def parse_args():
     parser = argparse.ArgumentParser(description="TalkHier BTP Unified GPU Experiment Runner")
     parser.add_argument("--config", type=str, default="configs/gpu_qwen3_8b.yaml", help="Path to YAML config")
+    parser.add_argument("--model", type=str, default=None, help="Override model name (e.g. Qwen/Qwen2.5-7B-Instruct)")
+    parser.add_argument("--base_url", type=str, default=None, help="Override LLM endpoint (e.g. http://127.0.0.1:8000/v1)")
     parser.add_argument("--dataset", type=str, default="mmlu", choices=["mmlu", "wikiqa", "camera", "gsm8k", "math", "all"])
     parser.add_argument("--domain", type=str, default="formal_logic", help="Specific MMLU domain or 'all'")
     parser.add_argument("--split", type=str, default="test", choices=["train", "calib", "dev", "test"])
@@ -102,7 +104,11 @@ def main():
     set_seed(args.seed)
     cfg = load_config(args.config)
 
-    backbone_name = cfg.get("experiment", {}).get("backbone", "Qwen/Qwen3-8B")
+    model_name = args.model or cfg.get("llm", {}).get("model") or cfg.get("experiment", {}).get("backbone", "Qwen/Qwen2.5-7B-Instruct")
+    base_url = args.base_url or cfg.get("llm", {}).get("base_url", "http://127.0.0.1:8000/v1")
+    provider = cfg.get("llm", {}).get("provider", "vllm")
+    backbone_name = model_name
+
     run_id = f"{args.dataset}_{args.method}_{args.ablation}_seed{args.seed}"
     out_dir = os.path.join(args.output_dir, run_id)
     os.makedirs(out_dir, exist_ok=True)
@@ -113,6 +119,7 @@ def main():
     print(f"Dataset   : {args.dataset} (Domain: {args.domain}, Split: {args.split})")
     print(f"Method    : {args.method} (Ablation: {args.ablation})")
     print(f"Backbone  : {backbone_name}")
+    print(f"Endpoint  : {base_url} ({provider})")
     print(f"Output Dir: {out_dir}")
     print("=" * 80)
 
@@ -130,9 +137,9 @@ def main():
     if not args.dry_run:
         llm_cfg = {
             "LLM": {
-                "provider": cfg.get("llm", {}).get("provider", "ollama"),
-                "model": cfg.get("llm", {}).get("model", "qwen3:8b"),
-                "base_url": cfg.get("llm", {}).get("base_url", "http://localhost:11434"),
+                "provider": provider,
+                "model": model_name,
+                "base_url": base_url,
                 "temperature": str(cfg.get("llm", {}).get("temperature", 0.0)),
                 "num_predict": str(cfg.get("llm", {}).get("max_tokens", 2048)),
                 "think": "false",

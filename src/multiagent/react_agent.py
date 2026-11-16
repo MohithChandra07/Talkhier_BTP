@@ -10,12 +10,22 @@ from langchain_core.runnables import (
 from langchain_core.tools import BaseTool
 from typing_extensions import Annotated, TypedDict
 
-from langgraph._api.deprecation import deprecated_parameter
+try:
+    from langgraph._api.deprecation import deprecated_parameter
+except ImportError:
+    def deprecated_parameter(*args, **kwargs):
+        def decorator(func):
+            return func
+        return decorator
 from langgraph.graph import StateGraph
 from langgraph.graph.graph import CompiledGraph
 from langgraph.graph.message import add_messages
 from langgraph.managed import IsLastStep
-from langgraph.prebuilt.tool_executor import ToolExecutor
+try:
+    from langgraph.prebuilt.tool_executor import ToolExecutor
+except ImportError:
+    class ToolExecutor:
+        pass
 from langgraph.prebuilt.tool_node import ToolNode
 from langgraph.store.base import BaseStore
 from langgraph.types import Checkpointer

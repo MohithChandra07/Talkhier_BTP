@@ -1,7 +1,10 @@
 import sys
 sys.path.append("../")
 
-from langchain_openai import AzureChatOpenAI
+try:
+    from langchain_openai import AzureChatOpenAI
+except ImportError:
+    AzureChatOpenAI = None
 from langchain_core.messages import AIMessage, BaseMessage, ToolMessage, SystemMessage
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 
