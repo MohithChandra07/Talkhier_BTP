@@ -191,7 +191,11 @@ def main():
     args = parse_args()
     os.makedirs(args.output_dir, exist_ok=True)
 
+    os.makedirs(args.runs_dir, exist_ok=True)
     run_dirs = [os.path.join(args.runs_dir, d) for d in os.listdir(args.runs_dir) if os.path.isdir(os.path.join(args.runs_dir, d))]
+    if not run_dirs:
+        print(f"No run directories found in '{args.runs_dir}'. Please run experiments.run first!")
+        return
     print(f"Scoring {len(run_dirs)} runs from {args.runs_dir}...")
 
     summaries = []
