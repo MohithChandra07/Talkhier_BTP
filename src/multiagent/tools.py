@@ -1,23 +1,32 @@
+import os
 import sys
-sys.path.append("../")
 
-from typing import Optional, Type
+_parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+if _parent_dir not in sys.path:
+    sys.path.insert(0, _parent_dir)
+
+from typing import Optional, Type, List
 import ast
 import unicodedata
 
-from langchain_community.agent_toolkits.load_tools import load_tools
+try:
+    from langchain_community.agent_toolkits.load_tools import load_tools
+except ImportError:
+    load_tools = None
+
 from pydantic import BaseModel, Field, field_validator
 from langchain_core.callbacks import (
     AsyncCallbackManagerForToolRun,
     CallbackManagerForToolRun,
 )
 from langchain_core.tools import BaseTool
-from typing import List
 
-from langchain_community.utilities.serpapi import SerpAPIWrapper
+try:
+    from langchain_community.utilities.serpapi import SerpAPIWrapper
+except ImportError:
+    SerpAPIWrapper = None
 
 import pickle
-import os
 import pandas as pd
 
 
@@ -348,10 +357,26 @@ def getSerpTool():
 
 
 
-from langchain.tools.retriever import create_retriever_tool
-from langchain_community.document_loaders import TextLoader, CSVLoader
-from okg.load_and_embed import customized_trend_retriever
-from langchain_experimental.utilities import PythonREPL
+try:
+    from langchain.tools.retriever import create_retriever_tool
+except ImportError:
+    create_retriever_tool = None
+
+try:
+    from langchain_community.document_loaders import TextLoader, CSVLoader
+except ImportError:
+    TextLoader, CSVLoader = None, None
+
+try:
+    from okg.load_and_embed import customized_trend_retriever
+except ImportError:
+    customized_trend_retriever = None
+
+try:
+    from langchain_experimental.utilities import PythonREPL
+except ImportError:
+    PythonREPL = None
+
 from langchain_core.tools import Tool
 
 
