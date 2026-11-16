@@ -1,4 +1,4 @@
-from typing import Callable, Literal, Optional, Sequence, Type, TypeVar, Union, cast
+from typing import Any, Callable, Literal, Optional, Sequence, Type, TypeVar, Union, cast
 
 from langchain_core.language_models import BaseChatModel, LanguageModelLike
 from langchain_core.messages import AIMessage, BaseMessage, SystemMessage, ToolMessage
@@ -17,19 +17,76 @@ except ImportError:
         def decorator(func):
             return func
         return decorator
+
 from langgraph.graph import StateGraph
-from langgraph.graph.graph import CompiledGraph
-from langgraph.graph.message import add_messages
-from langgraph.managed import IsLastStep
+
+try:
+    from langgraph.graph.graph import CompiledGraph
+except ImportError:
+    try:
+        from langgraph.graph.state import CompiledStateGraph as CompiledGraph
+    except ImportError:
+        CompiledGraph = Any
+
+try:
+    from langgraph.graph.message import add_messages
+except ImportError:
+    try:
+        from langgraph.graph import add_messages
+    except ImportError:
+        def add_messages(left, right):
+            return list(left) + list(right)
+
+try:
+    from langgraph.managed import IsLastStep
+except ImportError:
+    try:
+        from langgraph.managed.is_last_step import IsLastStep
+    except ImportError:
+        IsLastStep = Any
+
 try:
     from langgraph.prebuilt.tool_executor import ToolExecutor
 except ImportError:
     class ToolExecutor:
         pass
-from langgraph.prebuilt.tool_node import ToolNode
-from langgraph.store.base import BaseStore
-from langgraph.types import Checkpointer
-from langgraph.utils.runnable import RunnableCallable
+
+try:
+    from langgraph.prebuilt.tool_node import ToolNode
+except ImportError:
+    ToolNode = Any
+
+try:
+    from langgraph.store.base import BaseStore
+except ImportError:
+    BaseStore = Any
+
+try:
+    from langgraph.types import Checkpointer
+except ImportError:
+    try:
+        from langgraph.checkpoint.base import BaseCheckpointSaver as Checkpointer
+    except ImportError:
+        Checkpointer = Any
+
+try:
+    from langgraph.utils.runnable import RunnableCallable
+except ImportError:
+    try:
+        from langgraph.utils import RunnableCallable
+    except ImportError:
+        try:
+            from langchain_core.runnables import RunnableLambda as RunnableCallable
+        except ImportError:
+            class RunnableCallable:
+                def __init__(self, func, afunc=None, name=None, trace=True):
+                    self.func = func
+                    self.afunc = afunc
+                    self.name = name
+                def __call__(self, *args, **kwargs):
+                    return self.func(*args, **kwargs)
+                def invoke(self, *args, **kwargs):
+                    return self.func(*args, **kwargs)
 
 
 # We create the AgentState that we will pass around
