@@ -1,20 +1,33 @@
 from typing import Optional
 import os
-from langchain_openai import AzureChatOpenAI, ChatOpenAI
-from langchain_ollama import ChatOllama
+import sys
 
+_parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+if _parent_dir not in sys.path:
+    sys.path.insert(0, _parent_dir)
 
-class OllamaChatModel(ChatOllama):
-    think: Optional[bool] = None
+try:
+    from langchain_openai import AzureChatOpenAI, ChatOpenAI
+except ImportError:
+    AzureChatOpenAI = None
+    ChatOpenAI = None
 
-    def _chat_params(self, messages, stop=None, **kwargs):
-        params = super()._chat_params(messages, stop=stop, **kwargs)
-        if self.think is not None:
-            params["think"] = self.think
-        return params
+try:
+    from langchain_ollama import ChatOllama
+    class OllamaChatModel(ChatOllama):
+        think: Optional[bool] = None
 
-    def with_structured_output(self, schema, *, method="json_schema", **kwargs):
-        return super().with_structured_output(schema, method=method, **kwargs)
+        def _chat_params(self, messages, stop=None, **kwargs):
+            params = super()._chat_params(messages, stop=stop, **kwargs)
+            if self.think is not None:
+                params["think"] = self.think
+            return params
+
+        def with_structured_output(self, schema, *, method="json_schema", **kwargs):
+            return super().with_structured_output(schema, method=method, **kwargs)
+except ImportError:
+    ChatOllama = None
+    OllamaChatModel = None
 
 
 class LLM:
