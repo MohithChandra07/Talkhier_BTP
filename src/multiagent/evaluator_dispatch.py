@@ -4,9 +4,15 @@ Provides deterministic, explicit invocation of all five evaluators,
 transparent evaluation aggregation, structured Revisor input, and robust error handling.
 """
 
+import os
+import sys
 import time
 import json
 import ast
+
+_parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+if _parent_dir not in sys.path:
+    sys.path.insert(0, _parent_dir)
 from typing import Dict, Any, List, Optional, Tuple
 from langchain_core.messages import HumanMessage, AIMessage
 

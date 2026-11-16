@@ -16,9 +16,15 @@ Wires together:
 7. BudgetGuard enforcing token limits and termination guarantees.
 """
 
+import os
+import sys
 import time
 import copy
 import json
+
+_parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+if _parent_dir not in sys.path:
+    sys.path.insert(0, _parent_dir)
 from typing import Dict, Any, List, Optional, Tuple, Sequence
 from typing_extensions import TypedDict, Annotated
 import operator

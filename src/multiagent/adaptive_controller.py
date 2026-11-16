@@ -8,8 +8,14 @@ Implements the RL-Assisted Adaptive Refinement Policy:
 - Action Masking (Budget Guards restrict VERIFY_MORE when resource caps are hit)
 """
 
+import os
+import sys
 from typing import Dict, Any, List, Optional, Tuple, Sequence
 import numpy as np
+
+_parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+if _parent_dir not in sys.path:
+    sys.path.insert(0, _parent_dir)
 
 from multiagent.rl_env import RefinementState, ACTION_NAMES, ACTION_IDS
 from multiagent.policy import BasePolicy, FixedThresholdPolicy, LinUCBPolicy, LightweightDQNPolicy

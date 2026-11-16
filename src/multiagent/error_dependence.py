@@ -6,8 +6,14 @@ Estimates pairwise error dependence matrix Sigma = [rho_ij] with shrinkage regul
 Discounts redundant evaluator weights to mitigate co-hallucination majority traps.
 """
 
+import os
+import sys
 from typing import Dict, Any, List, Optional, Tuple, Sequence
 import numpy as np
+
+_parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+if _parent_dir not in sys.path:
+    sys.path.insert(0, _parent_dir)
 
 from multiagent.correlation import (
     compute_pairwise_correlation,

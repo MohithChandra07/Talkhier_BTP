@@ -25,8 +25,14 @@ from typing import Dict, Any, List, Optional, Tuple, Sequence
 from typing_extensions import TypedDict, Annotated
 import operator
 
+import os
+import sys
 from langchain_core.messages import HumanMessage, AIMessage, BaseMessage
 from langgraph.graph import StateGraph, START, END
+
+_parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+if _parent_dir not in sys.path:
+    sys.path.insert(0, _parent_dir)
 
 from multiagent.agent_team import (
     ReactAgent,
