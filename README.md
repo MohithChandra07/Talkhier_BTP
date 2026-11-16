@@ -5,7 +5,8 @@
 [![Python Version](https://img.shields.io/badge/Python-3.10%20%7C%203.11%20%7C%203.12-blue?logo=python&logoColor=white)](https://www.python.org/)
 [![Test Suite](https://img.shields.io/badge/Tests-69%20passed-brightgreen?logo=pytest&logoColor=white)](./tests/)
 [![License](https://img.shields.io/badge/License-CC%20BY--NC%204.0-lightgrey)](https://creativecommons.org/licenses/by-nc/4.0/)
-[![Target Deductive Accuracy](https://img.shields.io/badge/Verified%20Deductive%20Accuracy-100.0%25%20(24%2F24)-success)](#7-benchmark-results--ablation-study)
+[![Propositional Subset Accuracy](https://img.shields.io/badge/Propositional%20Subset%20Accuracy-100.0%25%20(24%2F24)-success)](#7-benchmark-results--ablation-study)
+[![Target Domain Accuracy](https://img.shields.io/badge/Target%20Domain%20Accuracy-92.6%25%20(25%2F27)-brightgreen)](#7-benchmark-results--ablation-study)
 [![Base Paper](https://img.shields.io/badge/Base%20Paper-arXiv%3A2502.11098-red?logo=arxiv&logoColor=white)](https://arxiv.org/abs/2502.11098)
 
 **A Neuro-Symbolic Multi-Agent Framework for Formal Deductive Reasoning**
@@ -44,10 +45,14 @@ Formal logic reasoning—evaluating deductive argument validity, constructing sa
 ### Research Objective
 This Bachelor Thesis Project (BTP) investigates the integration of **neural multi-agent deliberation with deterministic symbolic verification**. By integrating a propositional logic verification engine (powered by SymPy DPLL SAT solving) into the TalkHier multi-agent graph, the system validates extracted argument forms, synthesizes explicit countermodels for invalid arguments, and provides structured mathematical evidence to guide the revision process.
 
-Across our 35-problem MMLU Formal Logic benchmark:
-- The system achieved **100.0% accuracy (24/24)** on verified propositional logic arguments (up from 37.5% in initial generation).
-- Overall accuracy reached **88.6% (31/35)** across the stratified benchmark (up from 40.0% in initial generation).
-- Zero harmful revisions were observed across all 17 revisions executed.
+### Summary of Benchmark Findings (35 MMLU Formal Logic Problems)
+- **Target Domain (27 Problems):** Comprises **24 pure propositional problems** and **3 predicate/first-order logic (FOL) fallback problems** (Problems 49, 69, 101).
+  - On the **24 pure propositional problems**, the multi-agent system achieved **100.0% final-answer accuracy (24/24)**, up from 37.5% (9/24) in initial generation ($A_0$).
+  - On the **3 predicate/FOL fallback problems**, deterministic verification cleanly returned `NOT_APPLICABLE` (0 proofs generated), and standard LLM fallback achieved **33.3% accuracy (1/3)** (Problem 69 correct; Problems 49 and 101 incorrect).
+  - Target domain total accuracy reached **92.6% (25/27)**, up from 37.0% (10/27) in initial generation.
+- **Control Domain (8 Problems):** Stratified non-propositional questions where deterministic verification returned `NOT_APPLICABLE`, achieving **75.0% accuracy (6/8)**, up from 50.0% (4/8) in initial generation.
+- **Full Benchmark Total (35 Problems):** Overall final accuracy reached **88.6% (31/35)**, up from 40.0% (14/35) in initial generation.
+- **Revision Safety:** Zero harmful revisions were observed across all 17 revisions executed (15 in target, 2 in control).
 
 ---
 
@@ -247,19 +252,29 @@ Talkhier_BTP/
 
 ## 7. Benchmark Results & Ablation Study
 
-In **Sprint 4.3**, the framework was evaluated across **35 stratified MMLU Formal Logic problems** (27 target propositional logic problems and 8 stratified non-propositional control problems). 
+In **Sprint 4.3**, the framework was evaluated across **35 stratified MMLU Formal Logic problems**:
+- **Target Domain (27 Problems):** 24 pure propositional logic arguments and 3 predicate/FOL fallback problems.
+- **Control Domain (8 Problems):** Stratified non-propositional formal logic questions.
 
 ### 7.1 Aggregate Benchmark Performance (Sprint 4 Full vs. Baseline $A_0$)
 
-All metrics below are verified against `benchmark_comparison.csv` and `SPRINT_4_3_EVALUATION_REPORT.md`:
+All metrics below are verified against `benchmark_comparison.csv`, `raw_traces/sprint4_full/`, and `SPRINT_4_3_EVALUATION_REPORT.md`:
 
-| Benchmark Partition | Count ($N$) | Initial $A_0$ Accuracy | Sprint 4 Full Final Accuracy | Helpful Revisions | Harmful Revisions | Neutral Retentions | Verifier Proof Precision |
+| Benchmark Partition | Count ($N$) | Initial $A_0$ Accuracy | Final-Answer Accuracy | Helpful Revisions | Harmful Revisions | Neutral Retentions | Verifier Proof Precision |
 | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
 | **Target: Pure Propositional Logic** | 24 | 37.5% (9/24) | **100.0% (24/24)** | **15** | **0** | 9 | **100.0% (24/24)** |
-| **Target: Predicate Fallback** | 3 | 33.3% (1/3) | **33.3% (1/3)** | 0 | 0 | 3 | N/A (`NOT_APPLICABLE`) |
+| **Target: Predicate / FOL Fallback** | 3 | 33.3% (1/3) | **33.3% (1/3)** | 0 | 0 | 3 | N/A (`NOT_APPLICABLE`) |
 | **Target Domain Total** | 27 | 37.0% (10/27) | **92.6% (25/27)** | **15** | **0** | 12 | 100.0% (24/24) |
 | **Control Domain (Stratified)** | 8 | 50.0% (4/8) | **75.0% (6/8)** | **2** | **0** | 6 | N/A (`NOT_APPLICABLE`) |
 | **Full 35-Problem Benchmark** | **35** | **40.0% (14/35)** | **88.6% (31/35)** | **17** | **0** | **18** | **100.0% (24/24)** |
+
+#### Metric Definitions & Distinctions:
+- **Final-Answer Accuracy (24/24, 100.0% on Pure Propositional):** The final choice submitted by the multi-agent system after evaluation and revision matched the ground-truth answer in all 24 pure propositional problems.
+- **Deterministic Verifier Proof Precision (24/24, 100.0%):** Independently verified from the execution trace field `proven_choice_index == ground_truth` with `has_authoritative_proof: True`. For every pure propositional problem where formula extraction succeeded, the SymPy SAT engine proved validity/invalidity and identified the exact mathematically correct choice.
+- **Predicate / FOL Fallback Partition (3 Problems):** Problems 49, 69, and 101 contain relational predicates or quantifiers outside the propositional parser scope. The verifier returned `NOT_APPLICABLE` (0 proofs generated), and execution cleanly fell back to standard LLM evaluation, achieving 1/3 final accuracy (Problem 69 correct; Problems 49 and 101 incorrect).
+- **Control Partition (8 Problems):** Non-propositional logic questions where the verifier correctly returned `NOT_APPLICABLE`. The LLM multi-agent team produced 2 helpful revisions and 0 harmful revisions, achieving 75.0% (6/8) final accuracy.
+
+---
 
 ### 7.2 Head-to-Head Comparison: Sprint 3 Opt vs. Sprint 4 Full (18-Problem Slices)
 
@@ -272,6 +287,8 @@ To evaluate the specific impact of the deterministic verifier against our pure L
 | **Total Head-to-Head Subset** | 18 | 72.2% (13/18) | **88.9% (16/18)** | **+16.7% gain** |
 
 > **Statistical Note:** A paired McNemar test on the 18 shared problems yields $b = 4$ (Sprint 4 correct, Opt incorrect) and $c = 1$ (Opt correct, Sprint 4 incorrect), giving $\chi^2 = 0.80$ ($p > 0.05$ with Edwards continuity correction). While the observed +40.0% target-domain improvement is descriptively substantial, formal statistical significance is constrained by the paired sample size ($N=18$).
+
+---
 
 ### 7.3 Ablation Study
 
@@ -288,12 +305,14 @@ An ablation study was conducted across 5 challenging problems (`[6, 20, 23, 31, 
 1. **Voluntary Compliance (Ablation B):** When structured deterministic evidence was injected into Evaluator and Revisor prompts without an authoritative override, the Revisor voluntarily adopted the verified SAT proof in 100% of tested cases.
 2. **Hard Override as a Safeguard (Ablation A):** Hard override alone ensured 100% accuracy on verified extractions even when neural evaluators received no evidence, providing a reliable programmatic guardrail against hallucinated revisions.
 
+---
+
 ### 7.4 Error Analysis
 
 The 4 incorrect outcomes observed in Sprint 4 Full were analyzed to identify their root causes:
-- **Control Problems 1 & 4:** Non-propositional questions where deterministic verification correctly returned `NOT_APPLICABLE`. The pure LLM evaluators and Revisor retained flawed initial choices due to natural language ambiguity.
-- **Target Problems 49 & 101:** Contained first-order relational predicates and quantifiers outside the propositional parser scope, triggering clean fallback to LLM evaluation, which retained incorrect answers.
-- **Zero Harmful Revisions:** In none of the 35 cases did the system flip an initially correct $A_0$ into an incorrect answer.
+- **Control Problems 1 & 4 (Non-Propositional Control):** Deterministic verification correctly returned `NOT_APPLICABLE`. The pure LLM evaluators and Revisor retained flawed initial choices due to natural language ambiguity.
+- **Target Problems 49 & 101 (Predicate/FOL Fallback):** Contained first-order relational predicates and quantifiers outside the propositional parser scope, triggering clean fallback to LLM evaluation, which retained incorrect answers. (Target fallback Problem 69 was successfully answered by the LLM fallback path).
+- **Zero Harmful Revisions:** In none of the 35 benchmark cases did the system flip an initially correct $A_0$ into an incorrect answer.
 
 ---
 
@@ -302,7 +321,7 @@ The 4 incorrect outcomes observed in Sprint 4 Full were analyzed to identify the
 ### Prerequisites
 - macOS (Apple Silicon / Intel) or Linux (Ubuntu 20.04+)
 - Python 3.10, 3.11, or 3.12
-- Local LLM via [Ollama](https://ollama.ai/) (configured with `qwen2.5:7b` or `qwen3`) or an OpenAI-compatible API endpoint
+- Local LLM via [Ollama](https://ollama.ai/) (tested with `qwen3:8b` and `qwen2.5:7b`) or an Azure OpenAI endpoint
 
 ### 1. Clone the Repository
 ```bash
@@ -322,10 +341,37 @@ pip install -r requirements.txt
 ```
 
 ### 4. Configure LLM Access
-Configure `config/config_llm.ini` or set environment variables:
-```bash
-export OPENAI_API_KEY="your-api-key"
-export OPENAI_ENDPOINT="http://localhost:11434/v1"  # For local Ollama instances
+The system reads model and provider settings directly from `config/config_llm.ini`.
+
+**Option A: Local Ollama (Default Configuration)**
+Ensure Ollama is running (`ollama serve`), then configure `config/config_llm.ini`:
+```ini
+[LLM]
+provider = ollama
+model = qwen3:8b
+base_url = http://localhost:11434
+temperature = 0
+num_predict = 2048
+num_ctx = 8192
+think = false
+
+[STABILIZATION]
+enabled = true
+strict_scoring = true
+```
+
+**Option B: Azure OpenAI**
+If using Azure OpenAI, set `provider = azure` in `config/config_llm.ini` and specify deployment credentials:
+```ini
+[LLM]
+provider = azure
+deployment_name = <your-azure-deployment>
+openai_api_version = 2024-02-15-preview
+temperature = 0
+
+[KEYS]
+OPENAI_API_KEY = <your-api-key>
+OPENAI_ENDPOINT = https://<your-resource>.openai.azure.com/
 ```
 
 ### 5. Run the Test Suite
@@ -333,7 +379,7 @@ Verify that all 69 unit and integration tests pass:
 ```bash
 pytest tests/ -v
 ```
-*Expected output: `69 passed in ~1.2s`.*
+*Expected result: `69 passed in ~1.2s`.*
 
 ---
 
@@ -346,30 +392,36 @@ All benchmark comparisons, ablations, and error analysis CSVs can be reproduced 
 python3 src/experiment_sprint4_3.py --condition sprint4_full
 ```
 
-### Run Sprint 3 Optimized Baseline (18 Problems)
+### Run Sprint 3 Optimized Baseline (18 Problems Evaluated in Report)
 ```bash
-python3 src/experiment_sprint4_3.py --condition sprint3_opt
+python3 src/experiment_sprint4_3.py --condition sprint3_opt --problems 0 1 2 3 4 5 6 7 9 10 13 14 20 23 29 31 35 36
 ```
 
-### Run Ablation Studies
+### Run Ablation Studies (5 Problem Failure Subset)
 ```bash
 # Ablation A: Verifier + Hard Override (Evaluator Evidence Disabled)
-python3 src/experiment_sprint4_3.py --condition sprint4_ablation_a
+python3 src/experiment_sprint4_3.py --condition sprint4_ablation_a --problems 6 20 23 31 35
 
 # Ablation B: Verifier + Evaluator Evidence (Hard Override Disabled)
-python3 src/experiment_sprint4_3.py --condition sprint4_ablation_b
+python3 src/experiment_sprint4_3.py --condition sprint4_ablation_b --problems 6 20 23 31 35
+```
+
+### Resume Existing Runs
+To skip already completed problem traces without re-running inference, append `--resume`:
+```bash
+python3 src/experiment_sprint4_3.py --condition sprint4_full --resume
 ```
 
 ### Regenerate Consolidated Reports and Comparison CSVs
 ```bash
 python3 src/generate_sprint4_3_report.py
 ```
-This processes execution traces from `results/experiment_sprint4_3/raw_traces/` and outputs:
+This processes execution traces from `results/experiment_sprint4_3/raw_traces/` and regenerates:
 - `results/experiment_sprint4_3/benchmark_comparison.csv`
 - `results/experiment_sprint4_3/ablation_comparison.csv`
 - `results/experiment_sprint4_3/error_analysis.csv`
 
-> **Note on Reproduction:** LLM generation outputs depend on the exact model version, quantization, temperature (set to 0 for evaluation), and local inference hardware. Raw execution traces for all 63 runs are preserved in `results/experiment_sprint4_3/raw_traces/` for independent verification.
+> **Note on Reproduction:** LLM generation outputs depend on the exact model version, quantization, temperature (set to 0 for evaluation), and local inference hardware. Raw execution traces for all 63 runs are preserved in `results/experiment_sprint4_3/raw_traces/` for direct audit without re-running LLM inference.
 
 ---
 

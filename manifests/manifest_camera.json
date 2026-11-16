@@ -1,0 +1,35 @@
+[
+  {
+    "question_id": "camera/ad/001",
+    "domain": "camera",
+    "task_type": "ad_copy",
+    "product": "Sony Alpha 7 IV Full-frame Mirrorless Camera",
+    "features": "33MP Exmor R CMOS sensor, 4K 60p 10-bit 4:2:2 video, real-time eye AF, 5-axis stabilization",
+    "prompt": "Generate Google search ad headlines (<30 chars) and descriptions (<90 chars) emphasizing low-light autofocus and hybrid 4K video recording for Sony Alpha 7 IV.",
+    "ground_truth": "Relevant branded & non-branded ad copy strictly highlighting true product specifications.",
+    "headline_limit": 30,
+    "desc_limit": 90
+  },
+  {
+    "question_id": "camera/keywords/002",
+    "domain": "camera",
+    "task_type": "keyword_expansion",
+    "product": "Sony Bravia XR OLED 4K Smart TV",
+    "features": "Cognitive Processor XR, Acoustic Surface Audio+, Dolby Vision, 120Hz gaming support",
+    "prompt": "Determine high-converting branded and non-branded search keyword categories for Sony Bravia XR OLED television targeting premium home theater and gaming audiences.",
+    "ground_truth": "Structured keyword dictionary with Branded and Non-Branded categories.",
+    "headline_limit": 30,
+    "desc_limit": 90
+  },
+  {
+    "question_id": "camera/ad/003",
+    "domain": "camera",
+    "task_type": "ad_copy",
+    "product": "Sony FE 24-70mm F2.8 GM II Lens",
+    "features": "Constant F2.8 aperture, XA elements, fast linear motors, lightweight design",
+    "prompt": "Produce headline and description ad copies highlighting sharpness and portability for Sony FE 24-70mm G Master zoom lens.",
+    "ground_truth": "High-relevance ad copy accurately detailing G Master optical performance.",
+    "headline_limit": 30,
+    "desc_limit": 90
+  }
+]

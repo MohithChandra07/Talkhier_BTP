@@ -1,0 +1,26 @@
+[
+  {
+    "question_id": "wikiqa/0001",
+    "domain": "wikiqa",
+    "question": "HOW AFRICAN AMERICANS WERE TREATED IN THE REVOLUTIONARY WAR?",
+    "reference_answer": "African Americans played an important role in the revolution, fighting on both the British and Patriot sides.",
+    "candidate_sentences": [
+      "African Americans played an important role in the revolution.",
+      "The population of the colonies was predominantly European.",
+      "George Washington led the Continental Army."
+    ],
+    "ground_truth_index": 0
+  },
+  {
+    "question_id": "wikiqa/0002",
+    "domain": "wikiqa",
+    "question": "HOW MUCH IS 1 TROY OUNCE OF GOLD?",
+    "reference_answer": "One troy ounce is equal to 31.1034768 grams, and its price fluctuates daily based on commodities markets.",
+    "candidate_sentences": [
+      "A standard avoirdupois ounce is approximately 28.35 grams.",
+      "One troy ounce equals 31.1034768 grams.",
+      "Gold has been used as a store of value throughout human civilization."
+    ],
+    "ground_truth_index": 1
+  }
+]

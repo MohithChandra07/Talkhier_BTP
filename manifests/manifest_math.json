@@ -1,0 +1,18 @@
+[
+  {
+    "question_id": "math/algebra/001",
+    "domain": "math",
+    "topic": "algebra",
+    "question": "What is the positive solution to $x^2 + 5x - 24 = 0$?",
+    "solution_steps": "Factor: (x + 8)(x - 3) = 0. Positive root is x = 3.",
+    "ground_truth": 3
+  },
+  {
+    "question_id": "math/counting/002",
+    "domain": "math",
+    "topic": "counting_and_probability",
+    "question": "How many two-digit positive integers have tens digit greater than their units digit?",
+    "solution_steps": "For tens digit d from 1 to 9, units digit can be 0 to d-1 (d possibilities). Sum d for d=1..9: 1+2+...+9 = 45.",
+    "ground_truth": 45
+  }
+]

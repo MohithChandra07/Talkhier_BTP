@@ -1,0 +1,392 @@
+[
+  {
+    "question_id": "mmlu/machine_learning/test/0000",
+    "domain": "machine_learning",
+    "dataset": "mmlu",
+    "question": "Statement 1| Linear regression estimator has the smallest variance among all unbiased estimators. Statement 2| The coefficients \u03b1 assigned to the classifiers assembled by AdaBoost are always non-negative.",
+    "choices": [
+      "True, True",
+      "False, False",
+      "True, False",
+      "False, True"
+    ],
+    "ground_truth": 3
+  },
+  {
+    "question_id": "mmlu/machine_learning/test/0001",
+    "domain": "machine_learning",
+    "dataset": "mmlu",
+    "question": "Statement 1| RoBERTa pretrains on a corpus that is approximate 10x larger than the corpus BERT pretrained on. Statement 2| ResNeXts in 2018 usually used tanh activation functions.",
+    "choices": [
+      "True, True",
+      "False, False",
+      "True, False",
+      "False, True"
+    ],
+    "ground_truth": 2
+  },
+  {
+    "question_id": "mmlu/machine_learning/test/0002",
+    "domain": "machine_learning",
+    "dataset": "mmlu",
+    "question": "Statement 1| Support vector machines, like logistic regression models, give a probability distribution over the possible labels given an input example. Statement 2| We would expect the support vectors to remain the same in general as we move from a linear kernel to higher order polynomial kernels.",
+    "choices": [
+      "True, True",
+      "False, False",
+      "True, False",
+      "False, True"
+    ],
+    "ground_truth": 1
+  },
+  {
+    "question_id": "mmlu/machine_learning/test/0003",
+    "domain": "machine_learning",
+    "dataset": "mmlu",
+    "question": "A machine learning problem involves four attributes plus a class. The attributes have 3, 2, 2, and 2 possible values each. The class has 3 possible values. How many maximum possible different examples are there?",
+    "choices": [
+      "12",
+      "24",
+      "48",
+      "72"
+    ],
+    "ground_truth": 3
+  },
+  {
+    "question_id": "mmlu/machine_learning/test/0004",
+    "domain": "machine_learning",
+    "dataset": "mmlu",
+    "question": "As of 2020, which architecture is best for classifying high-resolution images?",
+    "choices": [
+      "convolutional networks",
+      "graph networks",
+      "fully connected networks",
+      "RBF networks"
+    ],
+    "ground_truth": 0
+  },
+  {
+    "question_id": "mmlu/machine_learning/test/0005",
+    "domain": "machine_learning",
+    "dataset": "mmlu",
+    "question": "Statement 1| The log-likelihood of the data will always increase through successive iterations of the expectation maximation algorithm. Statement 2| One disadvantage of Q-learning is that it can only be used when the learner has prior knowledge of how its actions affect its environment.",
+    "choices": [
+      "True, True",
+      "False, False",
+      "True, False",
+      "False, True"
+    ],
+    "ground_truth": 1
+  },
+  {
+    "question_id": "mmlu/machine_learning/test/0006",
+    "domain": "machine_learning",
+    "dataset": "mmlu",
+    "question": "Let us say that we have computed the gradient of our cost function and stored it in a vector g. What is the cost of one gradient descent update given the gradient?",
+    "choices": [
+      "O(D)",
+      "O(N)",
+      "O(ND)",
+      "O(ND^2)"
+    ],
+    "ground_truth": 0
+  },
+  {
+    "question_id": "mmlu/machine_learning/test/0007",
+    "domain": "machine_learning",
+    "dataset": "mmlu",
+    "question": "Statement 1| For a continuous random variable x and its probability distribution function p(x), it holds that 0 \u2264 p(x) \u2264 1 for all x. Statement 2| Decision tree is learned by minimizing information gain.",
+    "choices": [
+      "True, True",
+      "False, False",
+      "True, False",
+      "False, True"
+    ],
+    "ground_truth": 1
+  },
+  {
+    "question_id": "mmlu/machine_learning/test/0008",
+    "domain": "machine_learning",
+    "dataset": "mmlu",
+    "question": "Consider the Bayesian network given below. How many independent parameters are needed for this Bayesian Network H -> U <- P <- W?",
+    "choices": [
+      "2",
+      "4",
+      "8",
+      "16"
+    ],
+    "ground_truth": 2
+  },
+  {
+    "question_id": "mmlu/machine_learning/test/0009",
+    "domain": "machine_learning",
+    "dataset": "mmlu",
+    "question": "As the number of training examples goes to infinity, your model trained on that data will have:",
+    "choices": [
+      "Lower variance",
+      "Higher variance",
+      "Same variance",
+      "None of the above"
+    ],
+    "ground_truth": 0
+  },
+  {
+    "question_id": "mmlu/machine_learning/test/0010",
+    "domain": "machine_learning",
+    "dataset": "mmlu",
+    "question": "Statement 1| The set of all rectangles in the 2D plane (which includes non axisaligned rectangles) can shatter a set of 5 points. Statement 2| The VC-dimension of k-Nearest Neighbour classifier when k = 1 is infinite.",
+    "choices": [
+      "True, True",
+      "False, False",
+      "True, False",
+      "False, True"
+    ],
+    "ground_truth": 0
+  },
+  {
+    "question_id": "mmlu/machine_learning/test/0011",
+    "domain": "machine_learning",
+    "dataset": "mmlu",
+    "question": "_ refers to a model that can neither model the training data nor generalize to new data.",
+    "choices": [
+      "good fitting",
+      "overfitting",
+      "underfitting",
+      "all of the above"
+    ],
+    "ground_truth": 2
+  },
+  {
+    "question_id": "mmlu/machine_learning/test/0012",
+    "domain": "machine_learning",
+    "dataset": "mmlu",
+    "question": "Statement 1| The F1 score can be especially useful for datasets with class high imbalance. Statement 2| The area under the ROC curve is one of the main metrics used to assess anomaly detectors.",
+    "choices": [
+      "True, True",
+      "False, False",
+      "True, False",
+      "False, True"
+    ],
+    "ground_truth": 0
+  },
+  {
+    "question_id": "mmlu/machine_learning/test/0013",
+    "domain": "machine_learning",
+    "dataset": "mmlu",
+    "question": "Statement 1| The back-propagation algorithm learns a globally optimal neural network with hidden layers. Statement 2| The VC dimension of a line should be at most 2, since I can find at least one case of 3 points that cannot be shattered by any line.",
+    "choices": [
+      "True, True",
+      "False, False",
+      "True, False",
+      "False, True"
+    ],
+    "ground_truth": 1
+  },
+  {
+    "question_id": "mmlu/machine_learning/test/0014",
+    "domain": "machine_learning",
+    "dataset": "mmlu",
+    "question": "High entropy means that the partitions in classification are",
+    "choices": [
+      "pure",
+      "not pure",
+      "useful",
+      "useless"
+    ],
+    "ground_truth": 1
+  },
+  {
+    "question_id": "mmlu/machine_learning/test/0015",
+    "domain": "machine_learning",
+    "dataset": "mmlu",
+    "question": "Statement 1| Layer Normalization is used in the original ResNet paper, not Batch Normalization. Statement 2| DCGANs use self-attention to stabilize training.",
+    "choices": [
+      "True, True",
+      "False, False",
+      "True, False",
+      "False, True"
+    ],
+    "ground_truth": 1
+  },
+  {
+    "question_id": "mmlu/machine_learning/test/0016",
+    "domain": "machine_learning",
+    "dataset": "mmlu",
+    "question": "In building a linear regression model for a particular data set, you observe the coefficient of one of the features having a relatively high negative value. This suggests that",
+    "choices": [
+      "This feature has a strong effect on the model (should be retained)",
+      "This feature does not have a strong effect on the model (should be ignored)",
+      "It is not possible to comment on the importance of this feature without additional information",
+      "Nothing can be determined."
+    ],
+    "ground_truth": 2
+  },
+  {
+    "question_id": "mmlu/machine_learning/test/0017",
+    "domain": "machine_learning",
+    "dataset": "mmlu",
+    "question": "For a neural network, which one of these structural assumptions is the one that most affects the trade-off between underfitting (i.e. a high bias model) and overfitting (i.e. a high variance model):",
+    "choices": [
+      "The number of hidden nodes",
+      "The learning rate",
+      "The initial choice of weights",
+      "The use of a constant-term unit input"
+    ],
+    "ground_truth": 0
+  },
+  {
+    "question_id": "mmlu/machine_learning/test/0018",
+    "domain": "machine_learning",
+    "dataset": "mmlu",
+    "question": "For polynomial regression, which one of these structural assumptions is the one that most affects the trade-off between underfitting and overfitting:",
+    "choices": [
+      "The polynomial degree",
+      "Whether we learn the weights by matrix inversion or gradient descent",
+      "The assumed variance of the Gaussian noise",
+      "The use of a constant-term unit input"
+    ],
+    "ground_truth": 0
+  },
+  {
+    "question_id": "mmlu/machine_learning/test/0019",
+    "domain": "machine_learning",
+    "dataset": "mmlu",
+    "question": "Statement 1| As of 2020, some models attain greater than 98% accuracy on CIFAR-10. Statement 2| The original ResNets were not optimized with the Adam optimizer.",
+    "choices": [
+      "True, True",
+      "False, False",
+      "True, False",
+      "False, True"
+    ],
+    "ground_truth": 0
+  },
+  {
+    "question_id": "mmlu/machine_learning/test/0020",
+    "domain": "machine_learning",
+    "dataset": "mmlu",
+    "question": "The K-means algorithm:",
+    "choices": [
+      "Requires the dimension of the feature space to be no bigger than the number of samples",
+      "Has the smallest value of the objective function when K = 1",
+      "Minimizes the within class variance for a given number of clusters",
+      "Converges to the global optimum if and only if the initial means are chosen as some of the samples themselves"
+    ],
+    "ground_truth": 2
+  },
+  {
+    "question_id": "mmlu/machine_learning/test/0021",
+    "domain": "machine_learning",
+    "dataset": "mmlu",
+    "question": "Statement 1| VGGNets have convolutional kernels of smaller width and height than AlexNet's first-layer kernels. Statement 2| Data-dependent weight initialization procedures were introduced before Batch Normalization.",
+    "choices": [
+      "True, True",
+      "False, False",
+      "True, False",
+      "False, True"
+    ],
+    "ground_truth": 0
+  },
+  {
+    "question_id": "mmlu/machine_learning/test/0022",
+    "domain": "machine_learning",
+    "dataset": "mmlu",
+    "question": "What is the rank of the following matrix? A = [[1, 1, 1], [1, 1, 1], [1, 1, 1]]",
+    "choices": [
+      "0",
+      "1",
+      "2",
+      "3"
+    ],
+    "ground_truth": 1
+  },
+  {
+    "question_id": "mmlu/machine_learning/test/0023",
+    "domain": "machine_learning",
+    "dataset": "mmlu",
+    "question": "Statement 1| Density estimation (using say, the kernel density estimator) can be used to perform classification. Statement 2| The correspondence between logistic regression and Gaussian Naive Bayes (with identity class covariances) means that there is a one-to-one correspondence between the parameters of the two classifiers.",
+    "choices": [
+      "True, True",
+      "False, False",
+      "True, False",
+      "False, True"
+    ],
+    "ground_truth": 2
+  },
+  {
+    "question_id": "mmlu/machine_learning/test/0024",
+    "domain": "machine_learning",
+    "dataset": "mmlu",
+    "question": "Suppose we would like to perform clustering on spatial data such as the geometrical locations of houses. We wish to produce clusters of many different sizes and shapes. Which of the following methods is the most appropriate?",
+    "choices": [
+      "Decision Trees",
+      "Density-based clustering",
+      "Model-based clustering",
+      "K-means clustering"
+    ],
+    "ground_truth": 1
+  },
+  {
+    "question_id": "mmlu/machine_learning/test/0025",
+    "domain": "machine_learning",
+    "dataset": "mmlu",
+    "question": "Statement 1| In AdaBoost weights of the misclassified examples go up by the same multiplicative factor. Statement 2| In AdaBoost, weighted training error e_t of the tth weak classifier on training data with weights D_t tends to increase as a function of t.",
+    "choices": [
+      "True, True",
+      "False, False",
+      "True, False",
+      "False, True"
+    ],
+    "ground_truth": 0
+  },
+  {
+    "question_id": "mmlu/machine_learning/test/0026",
+    "domain": "machine_learning",
+    "dataset": "mmlu",
+    "question": "MLE estimates are often undesirable because",
+    "choices": [
+      "they are biased",
+      "they have high variance",
+      "they are not consistent estimators",
+      "None of the above"
+    ],
+    "ground_truth": 1
+  },
+  {
+    "question_id": "mmlu/machine_learning/test/0027",
+    "domain": "machine_learning",
+    "dataset": "mmlu",
+    "question": "Computational complexity of Gradient descent is,",
+    "choices": [
+      "linear in D",
+      "linear in N",
+      "polynomial in D",
+      "dependent on the number of iterations"
+    ],
+    "ground_truth": 2
+  },
+  {
+    "question_id": "mmlu/machine_learning/test/0028",
+    "domain": "machine_learning",
+    "dataset": "mmlu",
+    "question": "Averaging the output of multiple decision trees helps _.",
+    "choices": [
+      "Increase bias",
+      "Decrease bias",
+      "Increase variance",
+      "Decrease variance"
+    ],
+    "ground_truth": 3
+  },
+  {
+    "question_id": "mmlu/machine_learning/test/0029",
+    "domain": "machine_learning",
+    "dataset": "mmlu",
+    "question": "The model obtained by applying linear regression on the identified subset of features may differ from the model obtained at the end of the process of identifying the subset during",
+    "choices": [
+      "Best-subset selection",
+      "Forward stepwise selection",
+      "Forward stage wise selection",
+      "All of the above"
+    ],
+    "ground_truth": 2
+  }
+]

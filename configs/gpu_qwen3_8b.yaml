@@ -1,0 +1,47 @@
+# GPU Inference Configuration for Qwen3-8B / Qwen2.5-7B
+# TalkHier BTP — Sections 06, 07, 11 (GPU Implementation Plan)
+
+experiment:
+  project: "TalkHier_Reliable_RL"
+  backbone: "Qwen/Qwen3-8B"
+  reasoning_parser: "qwen3"
+  seed: 0
+  max_rounds: 3
+  budget_tokens: 15000
+
+llm:
+  provider: "vllm"                      # 'vllm' (OpenAI-compatible server), 'ollama', or 'azure'
+  model: "Qwen/Qwen3-8B"
+  base_url: "http://127.0.0.1:8000/v1"  # Local vLLM server endpoint
+  api_key: "EMPTY"
+  temperature: 0.0
+  max_tokens: 2048
+  enable_thinking: false                # Freeze thinking mode across all compared methods
+
+gpu:
+  target_gpu_id: 3                      # GPU 3 has 20GB free on the cluster
+  max_model_len: 16384
+  gpu_memory_utilization: 0.85
+  tensor_parallel_size: 1
+
+datasets:
+  mmlu:
+    domains:
+      - "formal_logic"
+      - "college_physics"
+      - "machine_learning"
+      - "moral_scenarios"
+      - "us_foreign_policy"
+  wikiqa:
+    target_pairs: 1473
+  camera:
+    target_items: 872
+  gsm8k:
+    target_items: 1319
+  math:
+    target_items: 5000
+
+logging:
+  raw_dir: "results/raw"
+  metrics_dir: "results/metrics"
+  figures_dir: "results/figures"

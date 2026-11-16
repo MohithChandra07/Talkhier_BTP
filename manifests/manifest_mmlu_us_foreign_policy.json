@@ -1,0 +1,392 @@
+[
+  {
+    "question_id": "mmlu/us_foreign_policy/test/0000",
+    "domain": "us_foreign_policy",
+    "dataset": "mmlu",
+    "question": "What is the structure of the United Nations Security Council?",
+    "choices": [
+      "5 permanent members with veto power, 10 rotating members with no veto power",
+      "5 permanent members and 10 rotating members, all with veto power",
+      "10 permanent members with veto power, and 5 rotating members without veto power",
+      "15 permanent members with veto power"
+    ],
+    "ground_truth": 0
+  },
+  {
+    "question_id": "mmlu/us_foreign_policy/test/0001",
+    "domain": "us_foreign_policy",
+    "dataset": "mmlu",
+    "question": "What was the significance of the Gulf of Tonkin resolution?",
+    "choices": [
+      "It allowed the US to intensify its involvement in Vietnam",
+      "It illustrated the influence of public opinion on US foreign policy",
+      "It enhanced Congressional control over the Vietnam War",
+      "It curtailed US involvement in Vietnam"
+    ],
+    "ground_truth": 0
+  },
+  {
+    "question_id": "mmlu/us_foreign_policy/test/0002",
+    "domain": "us_foreign_policy",
+    "dataset": "mmlu",
+    "question": "Which is not a nonstate actor that poses a threat to the United States?",
+    "choices": [
+      "Terrorists",
+      "Organized crime",
+      "Drug traffickers",
+      "China"
+    ],
+    "ground_truth": 3
+  },
+  {
+    "question_id": "mmlu/us_foreign_policy/test/0003",
+    "domain": "us_foreign_policy",
+    "dataset": "mmlu",
+    "question": "Who was the first American president to visit communist China?",
+    "choices": [
+      "Richard Nixon",
+      "George H. W. Bush",
+      "Jimmy Carter",
+      "Ronald Reagan"
+    ],
+    "ground_truth": 0
+  },
+  {
+    "question_id": "mmlu/us_foreign_policy/test/0004",
+    "domain": "us_foreign_policy",
+    "dataset": "mmlu",
+    "question": "The Strategic Arms Reduction Treaty was the first accord",
+    "choices": [
+      "on nuclear weapons signed between the United States and the Soviet Union.",
+      "cutting conventional arms in Europe.",
+      "to be rejected by the U.S. Senate.",
+      "mandating the elimination of many long-range nuclear missiles."
+    ],
+    "ground_truth": 3
+  },
+  {
+    "question_id": "mmlu/us_foreign_policy/test/0005",
+    "domain": "us_foreign_policy",
+    "dataset": "mmlu",
+    "question": "What were the implications of the Cold War for American exceptionalism?",
+    "choices": [
+      "It ended the influence of American exceptionalism entirely",
+      "Exceptionalism was enhanced by America's status as the 'leader of the free world'",
+      "The extension of American power globally challenged core assumptions of exceptionalism",
+      "Both b and c"
+    ],
+    "ground_truth": 3
+  },
+  {
+    "question_id": "mmlu/us_foreign_policy/test/0006",
+    "domain": "us_foreign_policy",
+    "dataset": "mmlu",
+    "question": "Why did Franklin D. Roosevelt initially favour an 'isolationist' stance on the part of the US during the 1930s?",
+    "choices": [
+      "He believed that internal reform rather than international negotiation was the key to economic regeneration of the US",
+      "He believed that German domination of Europe would be in US interests",
+      "He always favoured isolationism",
+      "All of the above"
+    ],
+    "ground_truth": 0
+  },
+  {
+    "question_id": "mmlu/us_foreign_policy/test/0007",
+    "domain": "us_foreign_policy",
+    "dataset": "mmlu",
+    "question": "What was the 'New Populism'?",
+    "choices": [
+      "A strand of neo-isolationist sentiment",
+      "A strand of internationalist sentiment",
+      "An expression of American cultural superiority",
+      "Increased incorporation of public opinion in foreign policy making"
+    ],
+    "ground_truth": 0
+  },
+  {
+    "question_id": "mmlu/us_foreign_policy/test/0008",
+    "domain": "us_foreign_policy",
+    "dataset": "mmlu",
+    "question": "How did World War I shift economic power from Europe to the United States?",
+    "choices": [
+      "The war reduced European population levels below that of the United States",
+      "The United States seized German resources after the war",
+      "European countries paid the United States for assistance",
+      "The United States became a creditor country and financial centre, with European war spending boosting the US economy"
+    ],
+    "ground_truth": 3
+  },
+  {
+    "question_id": "mmlu/us_foreign_policy/test/0009",
+    "domain": "us_foreign_policy",
+    "dataset": "mmlu",
+    "question": "In American government, the power to declare war rests with",
+    "choices": [
+      "the president of the United States.",
+      "the secretary of defense.",
+      "the chairman of the Joint Chiefs of Staff.",
+      "Congress."
+    ],
+    "ground_truth": 3
+  },
+  {
+    "question_id": "mmlu/us_foreign_policy/test/0010",
+    "domain": "us_foreign_policy",
+    "dataset": "mmlu",
+    "question": "How did the Cold War context shape US perceptions of the Third World?",
+    "choices": [
+      "The US ignored the Third World",
+      "Local developments were viewed through a geopolitical lens",
+      "The US unreservedly supported decolonization",
+      "None of the above"
+    ],
+    "ground_truth": 1
+  },
+  {
+    "question_id": "mmlu/us_foreign_policy/test/0011",
+    "domain": "us_foreign_policy",
+    "dataset": "mmlu",
+    "question": "What was unique about the NATO intervention in Kosovo?",
+    "choices": [
+      "It was the first time the US became involved in the Balkans",
+      "It was the first time NATO used military force",
+      "It was the first war won by airpower alone",
+      "It was the first war to employ 'smart weapons'"
+    ],
+    "ground_truth": 2
+  },
+  {
+    "question_id": "mmlu/us_foreign_policy/test/0012",
+    "domain": "us_foreign_policy",
+    "dataset": "mmlu",
+    "question": "What, according to Systemic theories, is the primary determinant of a state's foreign policy?",
+    "choices": [
+      "The character of a state's leader",
+      "The distribution of power in the international system",
+      "The distribution of power within a state's governmental system",
+      "A state's political ideology"
+    ],
+    "ground_truth": 1
+  },
+  {
+    "question_id": "mmlu/us_foreign_policy/test/0013",
+    "domain": "us_foreign_policy",
+    "dataset": "mmlu",
+    "question": "Why is there so much uncertainty over which states have nuclear weapons?",
+    "choices": [
+      "Leaders have incentives to lie",
+      "If leaders revealed their programs, they would be more likely to be attacked",
+      "Leaders will not always grant foreign monitors access to their nuclear programs",
+      "ALL of the above"
+    ],
+    "ground_truth": 3
+  },
+  {
+    "question_id": "mmlu/us_foreign_policy/test/0014",
+    "domain": "us_foreign_policy",
+    "dataset": "mmlu",
+    "question": "Within American politics, the power to accord official recognition to other countries belongs to",
+    "choices": [
+      "the Senate.",
+      "the president.",
+      "the Secretary of State.",
+      "the chairman of the Joint Chiefs."
+    ],
+    "ground_truth": 1
+  },
+  {
+    "question_id": "mmlu/us_foreign_policy/test/0015",
+    "domain": "us_foreign_policy",
+    "dataset": "mmlu",
+    "question": "What did the Moscow Treaty on Strategic Offensive Reductions do?",
+    "choices": [
+      "Required the United States and Russia to demobilize their armies",
+      "Required the United States and Russia to dismantle a significant number of their nuclear weapons",
+      "Prohibited the acquisition of new military bases",
+      "Prohibited short-range nuclear weapons"
+    ],
+    "ground_truth": 1
+  },
+  {
+    "question_id": "mmlu/us_foreign_policy/test/0016",
+    "domain": "us_foreign_policy",
+    "dataset": "mmlu",
+    "question": "What were the 'open-door notes'?",
+    "choices": [
+      "An American declaration that the US was always open to Chinese immigration",
+      "An American proclamation that China should be divided up between the US, Japan and the European empires",
+      "An American proclamation that China should be open to US trade and missionaries",
+      "An American declaration of support for Chinese economic protectionism"
+    ],
+    "ground_truth": 2
+  },
+  {
+    "question_id": "mmlu/us_foreign_policy/test/0017",
+    "domain": "us_foreign_policy",
+    "dataset": "mmlu",
+    "question": "International trade will almost always benefit both countries, so why do countries try to protect their own firms from exposure to the world market?",
+    "choices": [
+      "Irrationality on the part of the leadership",
+      "Costs of free trade are concentrated, but benefits are dispersed",
+      "Regime type",
+      "International conflict prevents trade"
+    ],
+    "ground_truth": 1
+  },
+  {
+    "question_id": "mmlu/us_foreign_policy/test/0018",
+    "domain": "us_foreign_policy",
+    "dataset": "mmlu",
+    "question": "Why did George H.W. Bush allow Saddam Hussein to remain in power after the Gulf War of 1991?",
+    "choices": [
+      "Lack of US firepower",
+      "Concern over oil supplies",
+      "Limited UN mandate and fear of a protracted conflict",
+      "Difficult terrain and fear of civilian casualties"
+    ],
+    "ground_truth": 2
+  },
+  {
+    "question_id": "mmlu/us_foreign_policy/test/0019",
+    "domain": "us_foreign_policy",
+    "dataset": "mmlu",
+    "question": "Why do Liberal Internationalists argue that international institutions are important to US grand strategy?",
+    "choices": [
+      "They allow the US to withdraw from the international arena",
+      "They serve American interests",
+      "The US is incapable of acting alone",
+      "None of the above"
+    ],
+    "ground_truth": 1
+  },
+  {
+    "question_id": "mmlu/us_foreign_policy/test/0020",
+    "domain": "us_foreign_policy",
+    "dataset": "mmlu",
+    "question": "What was the significance of the Truman Doctrine?",
+    "choices": [
+      "It indicated the special place of Greece and Turkey in American interests",
+      "It was Truman's first statement on European affairs",
+      "It indicated US reluctance to get involved in incidents outside of its immediate sphere of influence",
+      "It indicated that the US would now view all local revolts through a geopolitical lens"
+    ],
+    "ground_truth": 3
+  },
+  {
+    "question_id": "mmlu/us_foreign_policy/test/0021",
+    "domain": "us_foreign_policy",
+    "dataset": "mmlu",
+    "question": "What tend to be the effects of oil and other natural resource trade on developing states?",
+    "choices": [
+      "It democratizes countries",
+      "It has no real effect",
+      "It encourages stability of the regime",
+      "It changes the nature of the investor"
+    ],
+    "ground_truth": 2
+  },
+  {
+    "question_id": "mmlu/us_foreign_policy/test/0022",
+    "domain": "us_foreign_policy",
+    "dataset": "mmlu",
+    "question": "The dominant course for foreign policy throughout most of American history can be categorized as",
+    "choices": [
+      "containment.",
+      "neoconservatism.",
+      "isolationism.",
+      "protectionism."
+    ],
+    "ground_truth": 2
+  },
+  {
+    "question_id": "mmlu/us_foreign_policy/test/0023",
+    "domain": "us_foreign_policy",
+    "dataset": "mmlu",
+    "question": "What led Britain to impose new taxes on their American colonies?",
+    "choices": [
+      "To increase the wealth of King George III",
+      "The growing costs of war with France",
+      "Anger at America's growing prosperity",
+      "Pressure from rich merchants"
+    ],
+    "ground_truth": 1
+  },
+  {
+    "question_id": "mmlu/us_foreign_policy/test/0024",
+    "domain": "us_foreign_policy",
+    "dataset": "mmlu",
+    "question": "Who said \"Globalization is not something we can hold off or turn off. It is the economic equivalent of a force of nature-like wind or water\"?",
+    "choices": [
+      "Ronald Reagan",
+      "George Soros",
+      "Bill Clinton",
+      "George W. Bush"
+    ],
+    "ground_truth": 2
+  },
+  {
+    "question_id": "mmlu/us_foreign_policy/test/0025",
+    "domain": "us_foreign_policy",
+    "dataset": "mmlu",
+    "question": "The idea that war is \"the continuation of politics by other means\" helps to capture",
+    "choices": [
+      "diplomacy is the quietest instrument of influence in global politics.",
+      "the way political parties fight with each other.",
+      "the idea that governments use their military to help pursue policy goals.",
+      "the way Democrats and Republicans differ over the war in Iraq."
+    ],
+    "ground_truth": 2
+  },
+  {
+    "question_id": "mmlu/us_foreign_policy/test/0026",
+    "domain": "us_foreign_policy",
+    "dataset": "mmlu",
+    "question": "What are the key elements of the Liberal approach to US foreign policy?",
+    "choices": [
+      "Promotion of Democracy, free-trade and international institutions",
+      "Alliances, diplomacy and protectionism",
+      "The balance of power, self-sufficiency and prudence",
+      "None of the above"
+    ],
+    "ground_truth": 0
+  },
+  {
+    "question_id": "mmlu/us_foreign_policy/test/0027",
+    "domain": "us_foreign_policy",
+    "dataset": "mmlu",
+    "question": "What was the key difference between US expansion pre- and post- 1865?",
+    "choices": [
+      "US expansion was based on territory rather than markets post-1865",
+      "US expansion was based on markets rather than territory post-1865",
+      "US expansion was limited to Latin America post-1865",
+      "US expansion ended after 1865"
+    ],
+    "ground_truth": 1
+  },
+  {
+    "question_id": "mmlu/us_foreign_policy/test/0028",
+    "domain": "us_foreign_policy",
+    "dataset": "mmlu",
+    "question": "What case did President Eisenhower make against the 'military-industrial complex' in his farewell speech?",
+    "choices": [
+      "That the capitalist search for profits was the leading cause of armed conflict",
+      "That the United States no longer needed to be militarily strong",
+      "That military spending gave the arms industry unwarranted influence on politics and government",
+      "That private companies would undermine the role of the Armed Forces"
+    ],
+    "ground_truth": 2
+  },
+  {
+    "question_id": "mmlu/us_foreign_policy/test/0029",
+    "domain": "us_foreign_policy",
+    "dataset": "mmlu",
+    "question": "Within the United Nations, real power is located in",
+    "choices": [
+      "the Security Council.",
+      "the Chamber of Deputies.",
+      "the Council of Ministers.",
+      "the Secretariat."
+    ],
+    "ground_truth": 0
+  }
+]

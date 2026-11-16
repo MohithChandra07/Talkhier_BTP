@@ -1,0 +1,15 @@
+# Core TalkHier & Reliability Framework Dependencies
+pytest>=7.4.0
+pydantic>=2.0.0
+numpy>=1.24.0
+scipy>=1.10.0
+scikit-learn>=1.2.0
+sympy>=1.12
+matplotlib>=3.7.0
+langchain>=0.1.0
+langgraph>=0.0.10
+langchain-core>=0.1.0
+langchain-community>=0.0.10
+rouge-score>=0.1.2
+tqdm>=4.65.0
+
